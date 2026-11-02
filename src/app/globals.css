@@ -1,30 +1,31 @@
 @import "tailwindcss";
 
 /*
- * Clean white workspace with a forest-green accent. Only the sidebar (and the
- * mobile header) use the dark "misty forest" colors, via .theme-forest below.
- * Important results (decision, U, p-value, conclusion) are highlighted in green.
+ * Colors taken from the College of Computer Studies logo: dark navy/charcoal,
+ * royal blue, and teal-cyan. The workspace is clean white with a teal-blue
+ * accent; only the sidebar (and mobile header) use the dark logo colors, via
+ * .theme-brand below. Key results are highlighted in teal-blue.
  * Fixed light theme so every screen recording looks the same.
  */
 @theme {
-  --color-canvas: #f6f8f7;
+  --color-canvas: #f5f8fa;
   --color-surface: #ffffff;
-  --color-subtle: #f1f4f2;
-  --color-line: #e1e7e3;
-  --color-line-strong: #c9d3cd;
+  --color-subtle: #f0f4f7;
+  --color-line: #dfe7ed;
+  --color-line-strong: #c5d2dc;
 
-  --color-ink: #10201a;       /* main text  ~16:1 on white */
-  --color-ink-soft: #2c3d36;  /* body text  ~11:1 */
-  --color-muted: #5c6b64;     /* labels     ~5.6:1 */
+  --color-ink: #0f1a24;       /* main text  ~17:1 on white */
+  --color-ink-soft: #2a3a48;  /* body text  ~11:1 */
+  --color-muted: #5a6b79;     /* labels     ~5.5:1 */
 
-  --color-accent: #1f5c45;        /* forest green (buttons, highlights) ~8:1 */
-  --color-accent-hover: #174a37;
+  --color-accent: #0b6585;        /* logo teal-blue, darkened for text on white ~6.6:1 */
+  --color-accent-hover: #08506a;
   --color-on-accent: #ffffff;
-  --color-accent-soft: #e8f2ec;
-  --color-accent-line: #bcd6c7;
+  --color-accent-soft: #e5f4f8;
+  --color-accent-line: #b1dbe8;
 
-  /* Group markers: green for Group A, amber for Group B. */
-  --color-group-a: #1f7a57;
+  /* Group markers: teal for Group A, amber for Group B (easy to tell apart). */
+  --color-group-a: #0b7fa3;
   --color-group-b: #b07a12;
 
   --color-warn: #7a4f00;
@@ -36,24 +37,24 @@
   --color-danger-line: #f3c7c2;
 }
 
-/* Dark "misty forest" palette, used only by the sidebar and mobile header. */
-.theme-forest {
-  --color-canvas: #0d1513;
-  --color-surface: #15201c;
-  --color-subtle: #1f2d28;
-  --color-line: #2a3a34;
-  --color-line-strong: #3c4f47;
-  --color-ink: #edf2ee;
-  --color-ink-soft: #c9d4cd;
-  --color-muted: #98aaa1;
-  --color-accent: #a9cdb8;
-  --color-accent-hover: #c0dccb;
-  --color-on-accent: #0d1513;
-  --color-accent-soft: #1f3129;
-  --color-accent-line: #3f5d50;
+/* Dark logo palette (navy + cyan glow), used only by the sidebar and mobile header. */
+.theme-brand {
+  --color-canvas: #0e1620;
+  --color-surface: #15202b;
+  --color-subtle: #1c2b39;
+  --color-line: #263747;
+  --color-line-strong: #36506a;
+  --color-ink: #eef6fa;
+  --color-ink-soft: #c5d5e1;
+  --color-muted: #8ea5b7;
+  --color-accent: #4fd3e3;
+  --color-accent-hover: #7fe2ee;
+  --color-on-accent: #0e1620;
+  --color-accent-soft: #15384a;
+  --color-accent-line: #2b6178;
   background:
-    radial-gradient(ellipse 120% 35% at 20% 0%, rgba(175, 205, 190, 0.14), transparent 70%),
-    linear-gradient(180deg, #1a2723 0%, #0d1513 70%);
+    radial-gradient(ellipse 90% 40% at 100% 0%, rgba(34, 200, 220, 0.18), transparent 70%),
+    linear-gradient(165deg, #1a2838 0%, #0e1620 65%);
   color: var(--color-ink);
   color-scheme: dark;
 }
@@ -90,8 +91,8 @@ h3 {
  */
 .slide-root {
   --s: min(1vw, 1.7778vh);
-  /* Clean white slide with a very faint green tint at the top. */
-  background: linear-gradient(180deg, #eef4f0 0%, #ffffff 35%);
+  /* Clean white slide with a very faint teal tint at the top. */
+  background: linear-gradient(180deg, #e8f4f8 0%, #ffffff 35%);
 }
 .st-hero { font-size: clamp(34px, calc(var(--s) * 4.8), 96px); line-height: 1.05; }
 .st-title { font-size: clamp(26px, calc(var(--s) * 2.8), 56px); line-height: 1.12; }

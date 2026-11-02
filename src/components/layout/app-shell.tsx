@@ -22,7 +22,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen lg:pl-64">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-line theme-forest lg:flex">
+      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-line theme-brand lg:flex">
         <div className="border-b border-line px-5 py-5">
           <Brand />
         </div>
@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Mobile / tablet header */}
-      <header className="theme-forest sticky top-0 z-30 border-b border-line lg:hidden">
+      <header className="theme-brand sticky top-0 z-30 border-b border-line lg:hidden">
         <div className="flex items-center justify-between gap-3 px-4 py-3">
           <Brand />
           <MobileNav />

@@ -7,7 +7,7 @@ import { useSavedAnalysis } from "@/hooks/use-saved-analysis";
 import { useFullscreen } from "@/hooks/use-fullscreen";
 import { buttonStyles } from "@/components/ui/primitives";
 import { SLIDES } from "./slides";
-import { ForestLine } from "./forest-line";
+import { HexPattern } from "./hex-pattern";
 
 function isTypingTarget(target: EventTarget | null) {
   return (
@@ -141,7 +141,7 @@ export function PresentationDeck() {
         aria-roledescription="slide"
         aria-label={`Slide ${index + 1} of ${SLIDES.length}: ${slide.title}`}
       >
-        {index === 0 && <ForestLine />}
+        {index === 0 && <HexPattern />}
         <div
           key={index}
           className="relative z-10 m-auto w-full max-w-[min(92vw,1720px)] px-4 py-8 sm:px-[4vw]"

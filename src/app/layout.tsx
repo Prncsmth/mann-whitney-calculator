@@ -5,7 +5,7 @@ import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-/** Serif display face for headings (misty-forest theme). */
+/** Serif display face for headings. */
 const newsreader = Newsreader({ variable: "--font-newsreader", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d1513", // matches the dark sidebar / mobile header
+  themeColor: "#0e1620", // matches the dark sidebar / mobile header
   colorScheme: "light",
 };
 

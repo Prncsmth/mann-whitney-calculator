@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { SHOW_SOLUTION_EVENT } from "./seven-steps";
 import { CheckCircle2, CircleSlash, ListOrdered, MonitorPlay } from "lucide-react";
 import type { CriticalValueResult, MannWhitneyResult } from "@/types/statistics";
 import { displayNumber, formatAlpha, formatFixed, formatPValue, typographicMinus, withMinus } from "@/lib/utils/format";
@@ -69,10 +72,14 @@ export function ResultsDashboard({ result, isStale }: { result: MannWhitneyResul
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <a href="#solution" className={buttonStyles.secondary}>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(SHOW_SOLUTION_EVENT))}
+            className={buttonStyles.secondary}
+          >
             <ListOrdered className="h-4 w-4" aria-hidden />
             Show Solution
-          </a>
+          </button>
           <Link href="/presentation" className={buttonStyles.primary}>
             <MonitorPlay className="h-4 w-4" aria-hidden />
             Start Presentation

@@ -8,6 +8,7 @@ import { ResultsDashboard } from "@/components/results/results-dashboard";
 import { SevenSteps } from "@/components/results/seven-steps";
 import { GroupInputCard } from "./group-input-card";
 import { TestConfigCard } from "./test-config-card";
+import { BackToTop } from "@/components/ui/back-to-top";
 import { clearAnalysis, loadAnalysis, saveAnalysis } from "@/lib/storage/analysis-storage";
 
 export function CalculatorWorkspace({ initialState }: { initialState?: CalculatorState }) {
@@ -153,6 +154,7 @@ export function CalculatorWorkspace({ initialState }: { initialState?: Calculato
           </p>
         </div>
       )}
+      <BackToTop />
     </div>
   );
 }

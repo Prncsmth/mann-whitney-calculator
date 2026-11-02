@@ -128,7 +128,10 @@ describe("CalculatorWorkspace — sample dataset results", () => {
     const { user, calculate } = setup();
     await user.click(screen.getByRole("button", { name: "Load Sample Data" }));
     await calculate();
-    const titles = screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent).filter((t) => t?.startsWith("Step"));
+    const titles = screen
+      .getAllByRole("heading", { level: 3 })
+      .map((h) => h.querySelector("[data-step-title]")?.textContent)
+      .filter((t) => t?.startsWith("Step"));
     expect(titles).toEqual([
       "Step 1: State the hypotheses",
       "Step 2: Level of significance",
@@ -209,7 +212,9 @@ describe("CalculatorWorkspace — sample dataset results", () => {
 
     const solution = document.getElementById("solution")!;
     expect(screen.getByRole("heading", { name: "Step-by-step solution", level: 2 })).toBeTruthy();
-    expect(screen.getByRole("link", { name: "Show Solution" }).getAttribute("href")).toBe("#solution");
+    // Steps start closed; Show Solution opens all of them.
+    await user.click(screen.getByRole("button", { name: "Show Solution" }));
+    expect(screen.getAllByRole("button", { expanded: true }).filter((b) => b.getAttribute("aria-controls")?.startsWith("step-"))).toHaveLength(7);
 
     const text = solution.textContent ?? "";
     // Tie correction: 12 (×2), 14 (×3), 15, 16, 17, 18 (×2 each)
@@ -223,6 +228,39 @@ describe("CalculatorWorkspace — sample dataset results", () => {
     // One tail from the normal table, then doubled
     expect(text).toContain("P(Z ≥ 3.3753) = 0.00037");
     expect(text).toContain("p = 2 × P(Z ≥ |z|) = 2 × 0.00037 = 0.00074");
+  });
+
+  it("keeps the solution short: steps start closed but each shows its answer in one line", async () => {
+    const { user, calculate } = setup();
+    await user.click(screen.getByRole("button", { name: "Load Sample Data" }));
+    await calculate();
+
+    const stepButtons = () =>
+      screen.getAllByRole("button").filter((b) => b.getAttribute("aria-controls")?.startsWith("step-"));
+    expect(stepButtons()).toHaveLength(7);
+    expect(stepButtons().every((b) => b.getAttribute("aria-expanded") === "false")).toBe(true);
+    expect(document.getElementById("step-5-body")!.hidden).toBe(true);
+
+    // One-line answers are visible without opening anything.
+    expect(screen.getByText("U = 5 · z = −3.3753 · p = 0.00074")).toBeTruthy();
+    expect(screen.getByText("Reject H₀ (p = 0.00074 ≤ α = 0.05)")).toBeTruthy();
+    expect(screen.getByText("Significant difference · Gamified Learning scored higher")).toBeTruthy();
+
+    // Clicking a step opens only that step.
+    await user.click(stepButtons()[4]);
+    expect(document.getElementById("step-5-body")!.hidden).toBe(false);
+    expect(document.getElementById("step-1-body")!.hidden).toBe(true);
+
+    // The navigation bar opens a step.
+    const nav = within(screen.getByRole("navigation", { name: "Solution steps" }));
+    await user.click(nav.getByRole("button", { name: /Decision/ }));
+    expect(document.getElementById("step-6-body")!.hidden).toBe(false);
+
+    // Expand all / Collapse all.
+    await user.click(screen.getByRole("button", { name: "Expand all steps" }));
+    expect(stepButtons().every((b) => b.getAttribute("aria-expanded") === "true")).toBe(true);
+    await user.click(screen.getByRole("button", { name: "Collapse all steps" }));
+    expect(stepButtons().every((b) => b.getAttribute("aria-expanded") === "false")).toBe(true);
   });
 
   it("links to Presentation Mode from the results", async () => {

@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { ChevronDown, ChevronsDownUp, ChevronsUpDown } from "lucide-react";
 import type { CriticalValueResult, MannWhitneyResult } from "@/types/statistics";
 import { displayNumber, formatAlpha, formatFixed, formatPValue, typographicMinus, withMinus } from "@/lib/utils/format";
 import { alternativeLabel, methodDescription } from "@/lib/utils/result-labels";
@@ -22,19 +25,65 @@ function formatCount(n: number): string {
   return n < 1e15 ? Math.round(n).toLocaleString("en-US") : n.toExponential(3);
 }
 
-function Step({ number, title, children }: { number: number; title: string; children: ReactNode }) {
+/** Window event that opens every step and scrolls to the solution ("Show Solution" button). */
+export const SHOW_SOLUTION_EVENT = "mann-whitney:show-solution";
+
+const STEP_COUNT = 7;
+/** Short names for the step navigation bar. */
+const NAV_LABELS = ["Hypotheses", "Significance", "Given data", "Test used", "Computation", "Decision", "Conclusion"];
+
+const StepsContext = createContext<{ open: boolean[]; toggle: (n: number) => void }>({
+  open: Array(STEP_COUNT).fill(true),
+  toggle: () => {},
+});
+
+/**
+ * One collapsible step. When closed, the header still shows the step's answer
+ * in one line (`summary`), so users understand the result without opening it.
+ */
+function Step({ number, title, summary, children }: {
+  number: number;
+  title: string;
+  summary?: ReactNode;
+  children: ReactNode;
+}) {
+  const { open, toggle } = useContext(StepsContext);
+  const isOpen = open[number - 1];
   return (
-    <Card as="article" id={`step-${number}`} aria-labelledby={`step-${number}-title`} className="scroll-mt-24">
-      <div className="flex items-center gap-3 border-b border-line px-5 py-4">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent font-mono text-sm font-semibold text-on-accent">
-          {number}
-        </span>
-        <h3 id={`step-${number}-title`} className="text-lg font-semibold text-ink">
-          <span className="sr-only">Step {number}: </span>
-          {title}
-        </h3>
+    <Card as="article" id={`step-${number}`} className="scroll-mt-40 lg:scroll-mt-20">
+      <h3 className="text-lg font-semibold text-ink">
+        <button
+          type="button"
+          onClick={() => toggle(number)}
+          aria-expanded={isOpen}
+          aria-controls={`step-${number}-body`}
+          className="flex w-full items-center gap-3 rounded-lg px-5 py-4 text-left transition-colors hover:bg-subtle"
+        >
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-accent font-mono text-sm font-semibold text-on-accent">
+            {number}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span data-step-title>
+              <span className="sr-only">Step {number}: </span>
+              {title}
+            </span>
+            {summary && (
+              <span className="mt-0.5 block font-sans text-sm font-normal text-ink-soft">{summary}</span>
+            )}
+          </span>
+          <ChevronDown
+            className={`h-5 w-5 shrink-0 text-muted transition-transform ${isOpen ? "rotate-180" : ""}`}
+            aria-hidden
+          />
+        </button>
+      </h3>
+      <div
+        id={`step-${number}-body`}
+        hidden={!isOpen}
+        className="space-y-4 border-t border-line px-5 py-5 text-[15px] leading-relaxed text-ink-soft"
+      >
+        {children}
       </div>
-      <div className="space-y-4 px-5 py-5 text-[15px] leading-relaxed text-ink-soft">{children}</div>
     </Card>
   );
 }
@@ -56,6 +105,56 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
   const alpha = formatAlpha(config.alpha);
   const alphaPercent = displayNumber(config.alpha * 100, 4);
   const p = result.pValue;
+
+  /* ---------- Collapsible steps: closed by default so the page stays short ---------- */
+  const [open, setOpen] = useState<boolean[]>(() => Array(STEP_COUNT).fill(false));
+  const toggle = useCallback((n: number) => setOpen((o) => o.map((v, i) => (i === n - 1 ? !v : v))), []);
+  const setAll = (value: boolean) => setOpen(Array(STEP_COUNT).fill(value));
+  const allOpen = open.every(Boolean);
+
+  const scrollTo = (id: string) =>
+    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView?.({ behavior: "smooth", block: "start" }));
+
+  /** Open one step (from the navigation bar) and bring it into view. */
+  const goToStep = (n: number) => {
+    setOpen((o) => o.map((v, i) => (i === n - 1 ? true : v)));
+    scrollTo(`step-${n}`);
+  };
+
+  // "Show Solution" (in the results summary) opens every step.
+  useEffect(() => {
+    const onShow = () => {
+      setOpen(Array(STEP_COUNT).fill(true));
+      scrollTo("solution");
+    };
+    window.addEventListener(SHOW_SOLUTION_EVENT, onShow);
+    return () => window.removeEventListener(SHOW_SOLUTION_EVENT, onShow);
+  }, []);
+
+  /* ---------- One-line answers shown on each closed step ---------- */
+  const higherGroup = u.meanRankA > u.meanRankB ? nameA : u.meanRankB > u.meanRankA ? nameB : null;
+  // Short, plain answers so a closed step is still easy to read.
+  const summaries: ReactNode[] = [
+    config.alternative === "two-sided"
+      ? "H₀: no difference · H₁: there is a difference"
+      : `H₀: no difference · H₁: ${nameA} scores ${config.alternative === "greater" ? "higher" : "lower"}`,
+    `α = ${alpha}`,
+    `n₁ = ${u.n1} · n₂ = ${u.n2} · N = ${u.N}`,
+    "Mann–Whitney U test",
+    p === null
+      ? `U = ${num(u.U)} · p-value not computable`
+      : result.methodUsed === "asymptotic" && asymptotic.computable
+        ? `U = ${num(u.U)} · z = ${fx(asymptotic.z)} · p = ${formatPValue(p)}`
+        : `U = ${num(u.U)} · p = ${formatPValue(p)} (exact)`,
+    p === null
+      ? "No decision"
+      : `${interpretation.decisionStatement} (p = ${formatPValue(p)} ${result.decision === "reject" ? "≤" : ">"} α = ${alpha})`,
+    result.decision === "reject"
+      ? `Significant difference${higherGroup ? ` · ${higherGroup} scored higher` : ""}`
+      : result.decision === "fail-to-reject"
+        ? "No significant difference"
+        : "No conclusion",
+  ];
 
   const exactTail =
     config.alternative === "two-sided"
@@ -164,17 +263,51 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
   const cv = result.criticalValue;
 
   return (
+    <StepsContext.Provider value={{ open, toggle }}>
     <section id="solution" aria-labelledby="seven-steps-heading" className="scroll-mt-24 space-y-5">
-      <div>
-        <h2 id="seven-steps-heading" className="text-xl font-semibold text-ink">
-          Step-by-step solution
-        </h2>
-        <p className="mt-1 text-sm text-muted">
-          The complete seven-step solution, computed from the data above. Follow it to solve the same problem by hand.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 id="seven-steps-heading" className="text-xl font-semibold text-ink">
+            Step-by-step solution
+          </h2>
+          <p className="mt-1 text-sm text-muted">
+            Each step shows its answer. Click a step to see the full working.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setAll(!allOpen)}
+          className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-surface px-3 py-2 text-sm font-medium text-ink hover:bg-subtle"
+        >
+          {allOpen ? <ChevronsDownUp className="h-4 w-4" aria-hidden /> : <ChevronsUpDown className="h-4 w-4" aria-hidden />}
+          {allOpen ? "Collapse all steps" : "Expand all steps"}
+        </button>
       </div>
 
-      <Step number={1} title="State the hypotheses">
+      {/* Step navigation: stays at the top while scrolling (below the mobile header). */}
+      <nav
+        aria-label="Solution steps"
+        className="sticky top-18 z-20 overflow-x-auto rounded-lg border border-line bg-surface/95 px-1 py-1.5 shadow-sm backdrop-blur lg:top-2"
+      >
+        <ol className="flex min-w-max gap-1">
+          {NAV_LABELS.map((label, i) => (
+            <li key={label}>
+              <button
+                type="button"
+                onClick={() => goToStep(i + 1)}
+                className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm whitespace-nowrap transition-colors ${
+                  open[i] ? "bg-accent-soft font-medium text-accent" : "text-ink-soft hover:bg-subtle"
+                }`}
+              >
+                <span className="font-mono text-xs">{i + 1}</span>
+                {label}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      <Step number={1} title="State the hypotheses" summary={summaries[0]}>
         <Formula label="Null hypothesis (H₀)">
           <span className="font-sans">{interpretation.nullHypothesis}</span>
         </Formula>
@@ -184,7 +317,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         <p className="text-sm text-muted">Test direction: {alternativeLabel(config.alternative)}.</p>
       </Step>
 
-      <Step number={2} title="Level of significance">
+      <Step number={2} title="Level of significance" summary={summaries[1]}>
         <Formula>α = {alpha}</Formula>
         <p>
           We accept a {alphaPercent}% risk of rejecting H₀ when it is actually true (a Type I error). The p-value will be
@@ -192,7 +325,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
 
-      <Step number={3} title="Given data">
+      <Step number={3} title="Given data" summary={summaries[2]}>
         <div className="grid gap-4 md:grid-cols-2">
           {(["A", "B"] as const).map((g) => {
             const group = g === "A" ? result.input.groupA : result.input.groupB;
@@ -216,7 +349,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         <p className="font-mono text-sm text-ink-soft">N = n₁ + n₂ = {u.n1} + {u.n2} = {u.N}</p>
       </Step>
 
-      <Step number={4} title="Statistical test used">
+      <Step number={4} title="Statistical test used" summary={summaries[3]}>
         <p>
           <strong className="text-ink">Mann–Whitney U test</strong> (also called the Wilcoxon rank-sum test). It is a
           nonparametric test for two independent samples: it does not assume the data are normally distributed, and it
@@ -233,7 +366,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
 
-      <Step number={5} title="Compute the test statistic">
+      <Step number={5} title="Compute the test statistic" summary={summaries[4]}>
         <SubHeading>a. Combine, sort, and rank all scores</SubHeading>
         <p>
           All {u.N} scores are combined and sorted from lowest to highest. Ranks start at 1. Tied scores receive the
@@ -339,7 +472,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </div>
       </Step>
 
-      <Step number={6} title="Statistical decision">
+      <Step number={6} title="Statistical decision" summary={summaries[5]}>
         {p === null ? (
           <Notice level="warning">{typographicMinus(interpretation.decisionExplanation)}</Notice>
         ) : (
@@ -360,7 +493,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         )}
       </Step>
 
-      <Step number={7} title="Conclusion">
+      <Step number={7} title="Conclusion" summary={summaries[6]}>
         <p className="rounded-md border-l-[3px] border-accent bg-accent-soft px-4 py-3 text-[17px] leading-relaxed text-ink ring-1 ring-accent-line">{typographicMinus(interpretation.conclusion)}</p>
         <p>{typographicMinus(interpretation.directionStatement)}</p>
         <p className="text-sm text-muted">
@@ -369,5 +502,6 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
     </section>
+    </StepsContext.Provider>
   );
 }
