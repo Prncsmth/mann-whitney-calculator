@@ -33,7 +33,7 @@ function TitleSlide({ result }: SlideProps) {
       <div>
         <p className="st-small font-medium tracking-wide text-accent uppercase">{APP_SUBTITLE}</p>
         <h1 className="st-hero mt-[0.25em] font-semibold tracking-tight text-ink">Mann–Whitney U Test</h1>
-        <p className="st-lead mt-[0.8em] max-w-[52em] text-ink-soft">
+        <p className="st-lead mt-[0.8em] max-w-[52em] text-ink-soft md:max-w-[32em]">
           A nonparametric test of whether two independent groups differ, based on the ranks of their scores rather than
           on the raw values. Today: <strong className="font-semibold text-ink">{result.input.groupA.name}</strong> versus{" "}
           <strong className="font-semibold text-ink">{result.input.groupB.name}</strong>.

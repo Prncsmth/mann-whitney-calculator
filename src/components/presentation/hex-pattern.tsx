@@ -32,14 +32,13 @@ export function HexPattern() {
       aria-hidden
       viewBox={`0 0 ${9 * W} ${9 * H}`}
       preserveAspectRatio="xMaxYMid slice"
-      className="pointer-events-none absolute inset-y-0 right-0 h-full w-[55%] opacity-60"
+      className="pointer-events-none absolute inset-y-0 right-0 hidden h-full w-[34%] opacity-50 md:block"
+      // Fade the hexagons out toward the text on the left.
+      style={{
+        maskImage: "linear-gradient(to right, transparent, black 55%)",
+        WebkitMaskImage: "linear-gradient(to right, transparent, black 55%)",
+      }}
     >
-      <defs>
-        <linearGradient id="hex-fade" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#ffffff" stopOpacity="1" />
-          <stop offset="0.55" stopColor="#ffffff" stopOpacity="0" />
-        </linearGradient>
-      </defs>
       {CELLS.map((c, i) => (
         <path
           key={i}
@@ -49,7 +48,6 @@ export function HexPattern() {
           strokeWidth="2"
         />
       ))}
-      <rect x="0" y="0" width={9 * W} height={9 * H} fill="url(#hex-fade)" />
     </svg>
   );
 }
