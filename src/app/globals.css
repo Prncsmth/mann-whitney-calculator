@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/*
+ * "Misty forest" theme: deep evergreen background, soft fog, sage accents,
+ * and an elegant serif for headings. One fixed dark theme (it does not follow
+ * the system setting), so every screen recording looks the same.
+ *
+ * Readability first: body text, numbers and formulas use near-white ink with
+ * contrast well above WCAG AA on every surface.
+ */
+@theme {
+  --color-canvas: #0d1513;
+  --color-surface: #15201c;
+  --color-subtle: #1c2924;
+  --color-line: #2a3a34;
+  --color-line-strong: #3c4f47;
+
+  --color-ink: #edf2ee;       /* main text  ~15:1 on surface */
+  --color-ink-soft: #c9d4cd;  /* body text  ~11:1 */
+  --color-muted: #98aaa1;     /* labels     ~6.8:1 */
+
+  --color-accent: #a9cdb8;        /* pale sage (buttons, highlights) */
+  --color-accent-hover: #c0dccb;
+  --color-on-accent: #0d1513;     /* text on accent backgrounds */
+  --color-accent-soft: #1d2f28;
+  --color-accent-line: #3f5d50;
+
+  /* Group markers: sage for Group A, warm mist-gold for Group B. */
+  --color-group-a: #8fc4a6;
+  --color-group-b: #d8c48f;
+
+  --color-warn: #e9cf8c;
+  --color-warn-soft: #29261a;
+  --color-warn-line: #5a4e2a;
+
+  --color-danger: #f2aaa0;
+  --color-danger-soft: #2d1b19;
+  --color-danger-line: #66352f;
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-newsreader), ui-serif, Georgia, serif;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  /* Soft fog drifting over a dark forest floor. Fixed so it does not scroll. */
+  background:
+    radial-gradient(ellipse 80% 45% at 15% -5%, rgba(175, 205, 190, 0.13), transparent 70%),
+    radial-gradient(ellipse 60% 35% at 95% 0%, rgba(175, 205, 190, 0.08), transparent 70%),
+    linear-gradient(180deg, #14201c 0%, var(--color-canvas) 55%);
+  background-attachment: fixed;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings use the serif display face, like the reference image. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+/*
+ * Presentation Mode type scale. --s is 1% of a 16:9 frame that fits the
+ * window: exactly 19.2px at 1920×1080. clamp() keeps text readable on phones.
+ */
+.slide-root {
+  --s: min(1vw, 1.7778vh);
+  /* Mist at the top fading into the dark treeline, as in the reference. */
+  background:
+    radial-gradient(ellipse 70% 40% at 30% 0%, rgba(190, 215, 203, 0.16), transparent 70%),
+    radial-gradient(ellipse 50% 30% at 85% 10%, rgba(190, 215, 203, 0.09), transparent 70%),
+    linear-gradient(180deg, #24332e 0%, #17221e 45%, var(--color-canvas) 100%);
+}
+.st-hero { font-size: clamp(34px, calc(var(--s) * 4.8), 96px); line-height: 1.05; }
+.st-title { font-size: clamp(26px, calc(var(--s) * 2.8), 56px); line-height: 1.12; }
+.st-big { font-size: clamp(28px, calc(var(--s) * 3.4), 68px); line-height: 1.1; }
+.st-lead { font-size: clamp(18px, calc(var(--s) * 1.75), 36px); line-height: 1.45; }
+.st-body { font-size: clamp(16px, calc(var(--s) * 1.45), 29px); line-height: 1.5; }
+.st-formula { font-size: clamp(15px, calc(var(--s) * 1.45), 29px); line-height: 1.5; }
+.st-small { font-size: clamp(13px, calc(var(--s) * 1.1), 22px); line-height: 1.45; }
+.st-gap { gap: clamp(16px, calc(var(--s) * 2), 40px); }
+.st-pad { padding: clamp(14px, calc(var(--s) * 1.4), 28px) clamp(16px, calc(var(--s) * 1.8), 36px); }
+
+/* Visible keyboard focus everywhere. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
