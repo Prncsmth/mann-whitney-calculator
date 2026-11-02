@@ -77,7 +77,7 @@ export function CalculatorWorkspace({ initialState }: { initialState?: Calculato
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 id="input-heading" className="text-xl font-semibold text-ink">
-              Data input
+              Data Input
             </h2>
             <p className="mt-1 text-sm text-muted">Enter the scores of two independent groups.</p>
           </div>
@@ -148,7 +148,7 @@ export function CalculatorWorkspace({ initialState }: { initialState?: Calculato
         </div>
       ) : (
         <div className="rounded-lg border border-dashed border-line-strong bg-surface px-6 py-10 text-center">
-          <p className="font-medium text-ink">No results yet</p>
+          <p className="font-medium text-ink">No Results Yet</p>
           <p className="mt-1 text-sm text-muted">
             Enter data for both groups (or load the sample data) and press Calculate.
           </p>

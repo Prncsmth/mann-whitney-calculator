@@ -133,12 +133,12 @@ describe("CalculatorWorkspace — sample dataset results", () => {
       .map((h) => h.querySelector("[data-step-title]")?.textContent)
       .filter((t) => t?.startsWith("Step"));
     expect(titles).toEqual([
-      "Step 1: State the null hypothesis and alternative hypothesis",
-      "Step 2: State the level of significance",
-      "Step 3: Write the data",
-      "Step 4: Test statistic used",
-      "Step 5: Calculate the test statistic and determine the critical table value",
-      "Step 6: Make a decision",
+      "Step 1: State the Null Hypothesis and Alternative Hypothesis",
+      "Step 2: State the Level of Significance",
+      "Step 3: Write the Data",
+      "Step 4: Test Statistic Used",
+      "Step 5: Calculate the Test Statistic and Determine the Critical Table Value",
+      "Step 6: Make a Decision",
       "Step 7: Conclusion",
     ]);
     expect(screen.queryByRole("tablist")).toBeNull();
@@ -211,7 +211,7 @@ describe("CalculatorWorkspace — sample dataset results", () => {
     await calculate();
 
     const solution = document.getElementById("solution")!;
-    expect(screen.getByRole("heading", { name: "Step-by-step solution", level: 2 })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Step-by-Step Solution", level: 2 })).toBeTruthy();
     // Steps start closed; Show Solution opens all of them.
     await user.click(screen.getByRole("button", { name: "Show Solution" }));
     expect(screen.getAllByRole("button", { expanded: true }).filter((b) => b.getAttribute("aria-controls")?.startsWith("step-"))).toHaveLength(7);

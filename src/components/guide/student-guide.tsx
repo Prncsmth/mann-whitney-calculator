@@ -4,12 +4,12 @@ import { Card, CardHeader } from "@/components/ui/primitives";
 const STEPS = [
   {
     icon: ClipboardList,
-    title: "Enter the scores",
+    title: "Enter the Scores",
     text: "Type or paste each group's scores, separated by commas or new lines. Not sure? Press Load Sample Data.",
   },
   {
     icon: SlidersHorizontal,
-    title: "Check the settings",
+    title: "Check the Settings",
     text: "The defaults (α = 0.05, two-sided, normal approximation) fit most class problems. Change them only if your problem says so.",
   },
   {
@@ -29,7 +29,7 @@ export function HowToUse({ compact = false }: { compact?: boolean }) {
   return (
     <section aria-labelledby="how-to-use-title" className={compact ? "mb-8" : ""}>
       <h2 id="how-to-use-title" className={compact ? "sr-only" : "mb-4 text-2xl text-ink"}>
-        How to use
+        How to Use
       </h2>
       <ol className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {STEPS.map(({ icon: Icon, title, text }, i) => (
@@ -67,7 +67,7 @@ const TERMS: { term: string; meaning: string }[] = [
 export function Glossary() {
   return (
     <Card aria-labelledby="glossary-title">
-      <CardHeader id="glossary-title" title="Key terms in plain words" description="Read these once before your first analysis." />
+      <CardHeader id="glossary-title" title="Key Terms in Plain Words" description="Read these once before your first analysis." />
       <dl className="grid gap-x-8 px-5 py-2 md:grid-cols-2">
         {TERMS.map(({ term, meaning }) => (
           <div key={term} className="border-b border-line py-3 last:border-b-0 md:[&:nth-last-child(2)]:border-b-0">

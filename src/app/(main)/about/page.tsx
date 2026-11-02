@@ -19,7 +19,7 @@ interface ProcedureStep {
  */
 const PROCEDURE: ProcedureStep[] = [
   {
-    title: "State the null hypothesis and alternative hypothesis",
+    title: "State the Null Hypothesis and Alternative Hypothesis",
     text: "Write the null hypothesis (H₀) and the alternative hypothesis (H₁). The null hypothesis says there is no difference between the two groups. The alternative hypothesis says there is a difference.",
     substeps: [
       "Two-tailed (two-sided) test: H₁ says the groups differ, without saying which group is higher.",
@@ -31,12 +31,12 @@ const PROCEDURE: ProcedureStep[] = [
     ],
   },
   {
-    title: "State the level of significance",
+    title: "State the Level of Significance",
     text: "Choose alpha (α), the level of significance. Alpha is the risk we accept of rejecting the null hypothesis when it is actually true (a Type I error). The usual choice is 0.05, which means a 5% risk.",
     formulas: ["α = 0.05"],
   },
   {
-    title: "Write the data",
+    title: "Write the Data",
     text: "Write the scores of each group and count how many scores each group has.",
     substeps: [
       "n₁ is the number of scores in Group A.",
@@ -46,11 +46,11 @@ const PROCEDURE: ProcedureStep[] = [
     formulas: ["N = n₁ + n₂"],
   },
   {
-    title: "Test statistic used",
+    title: "Test Statistic Used",
     text: "Use the Mann–Whitney U test. It is a nonparametric test for two independent samples: the two groups contain different people, and the data do not need to follow a normal distribution. The test compares the ranks of the scores, not their means.",
   },
   {
-    title: "Calculate the test statistic and determine the critical table value",
+    title: "Calculate the Test Statistic and Determine the Critical Table Value",
     text: "Follow these steps in order.",
     substeps: [
       "Combine the scores of both groups into one list.",
@@ -74,7 +74,7 @@ const PROCEDURE: ProcedureStep[] = [
     key: true,
   },
   {
-    title: "Make a decision",
+    title: "Make a Decision",
     text: "Compare the p-value with alpha.",
     substeps: [
       "If the p-value is less than or equal to alpha, reject the null hypothesis.",
@@ -110,7 +110,7 @@ export default function AboutPage() {
         <Card aria-labelledby="procedure-title">
           <CardHeader
             id="procedure-title"
-            title="The seven-step procedure"
+            title="The Seven-Step Procedure"
             description="The steps the calculator follows. You can use them to solve a problem by hand."
           />
           <ol className="divide-y divide-line">
@@ -145,28 +145,28 @@ export default function AboutPage() {
           </ol>
         </Card>
 
-        <Section title="Ranking and U statistics">
+        <Section title="Ranking and U Statistics">
           <p>Both groups are combined and sorted in ascending order. Ranks start at 1; tied scores receive the average of the positions they occupy (for example, the scores 10, 12, 12, 15 get the ranks 1, 2.5, 2.5, 4).</p>
           <Formula>U₁ = R₁ − n₁(n₁ + 1) / 2 &nbsp;&nbsp; U₂ = R₂ − n₂(n₂ + 1) / 2 &nbsp;&nbsp; U = the smaller of U₁ and U₂</Formula>
           <p>Checks performed on every calculation: R₁ + R₂ = N(N + 1)/2 and U₁ + U₂ = n₁n₂. Group A is always group 1.</p>
         </Section>
 
-        <Section title="Normal approximation (default)">
+        <Section title="Normal Approximation (Default)">
           <Formula>μ = n₁n₂ / 2 &nbsp;&nbsp; σ² = (n₁n₂ / 12)·[(N + 1) − Σ(t³ − t) / (N(N − 1))]</Formula>
           <p>t is the number of observations sharing a tied value. The continuity correction (on by default) moves U₁ − μ by 0.5 toward zero for the chosen alternative, the same convention as R&apos;s <code>wilcox.test(correct = TRUE)</code>. Two-sided p-value = 2 × the smaller of Φ(z) and 1 − Φ(z), where Φ(z) is the probability that a standard normal value is at most z. A warning is shown when either group has fewer than 10 observations.</p>
         </Section>
 
-        <Section title="Exact permutation test">
+        <Section title="Exact Permutation Test">
           <p>Under H₀ every split of the pooled observations into groups of size n₁ and n₂ is equally likely. The calculator counts all C(N, n₁) splits exactly, keeping the observed tied ranks, so ties are handled correctly. It uses a counting method that gives the same result as listing every split.</p>
           <Formula>two-sided p = P(|U₁ − n₁n₂/2| ≥ |u₁ − n₁n₂/2|)</Formula>
           <p>The two-sided p-value counts outcomes at least as extreme as the observed one in either direction; it is not computed by doubling a one-sided p-value. If the exact distribution is too large to compute quickly (roughly more than 75 observations per group), the normal approximation is used and this is stated with the results.</p>
         </Section>
 
-        <Section title="Critical values">
+        <Section title="Critical Values">
           <p>The critical value is the largest value c with P(U ≤ c) ≤ α under the exact null distribution of the entered data (tie-aware). For one-sided tests, it applies to U₁ (Group A less than Group B) or U₂ (Group A greater than Group B). When the data contain ties, the conventional table value (which assumes no ties) is shown separately as a reference only. If no outcome is extreme enough, the calculator says so and the p-value decision is used.</p>
         </Section>
 
-        <Section title="Effect sizes">
+        <Section title="Effect Sizes">
           <Formula>r_rb = (U₁ − U₂) / (n₁n₂) &nbsp;&nbsp; r = z / √N</Formula>
           <p>z is the uncorrected z (no continuity correction, tie-corrected variance). Positive values mean Group A tends to score higher; negative values mean Group B tends to score higher. Magnitude labels follow Cohen&apos;s thresholds: below 0.1 negligible, 0.1 small, 0.3 medium, 0.5 large. Effect sizes describe the observed samples and do not imply causation.</p>
         </Section>

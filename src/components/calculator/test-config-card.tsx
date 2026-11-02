@@ -90,7 +90,7 @@ export function TestConfigCard({
 
   return (
     <Card aria-labelledby="config-title">
-      <CardHeader id="config-title" title="Test configuration" description="Settings used for the hypothesis test." />
+      <CardHeader id="config-title" title="Test Configuration" description="Settings used for the hypothesis test." />
       <div className="grid gap-6 px-5 py-5 lg:grid-cols-3">
         <fieldset>
           <legend className="mb-2 text-sm font-medium text-ink-soft">Significance level (α)</legend>

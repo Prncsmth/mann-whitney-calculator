@@ -83,18 +83,18 @@ export function PresentationDeck() {
   if (saved.status === "empty") {
     return (
       <StatusScreen
-        title="No saved analysis yet"
+        title="No Saved Analysis Yet"
         message="Presentation Mode shows the latest calculation. Open the calculator, enter or load data, and press Calculate first."
       />
     );
   }
   if (saved.status === "invalid") {
-    return <StatusScreen title="Saved analysis cannot be used" message={`${saved.reason} Please calculate again in the calculator.`} />;
+    return <StatusScreen title="Saved Analysis Cannot Be Used" message={`${saved.reason} Please calculate again in the calculator.`} />;
   }
   if (saved.status === "unavailable") {
     return (
       <StatusScreen
-        title="Browser storage is unavailable"
+        title="Browser Storage Is Unavailable"
         message="Presentation Mode receives the analysis through your browser's local storage, which is blocked or disabled (for example in some private windows). Allow site data and calculate again."
       />
     );

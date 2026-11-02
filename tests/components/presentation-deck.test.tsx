@@ -33,7 +33,7 @@ function renderWithSample(config = DEFAULT_CONFIG) {
 describe("PresentationDeck — saved data states", () => {
   it("explains what to do when there is no saved analysis", () => {
     render(<PresentationDeck />);
-    expect(screen.getByText("No saved analysis yet")).toBeTruthy();
+    expect(screen.getByText("No Saved Analysis Yet")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Open Calculator" }).getAttribute("href")).toBe("/calculator");
     expect(screen.queryByTestId("slide")).toBeNull();
   });
@@ -41,7 +41,7 @@ describe("PresentationDeck — saved data states", () => {
   it("does not show slides for malformed saved data", () => {
     window.localStorage.setItem(STORAGE_KEY, "{broken");
     render(<PresentationDeck />);
-    expect(screen.getByText("Saved analysis cannot be used")).toBeTruthy();
+    expect(screen.getByText("Saved Analysis Cannot Be Used")).toBeTruthy();
     expect(screen.queryByTestId("slide")).toBeNull();
   });
 
@@ -55,12 +55,12 @@ describe("PresentationDeck — saved data states", () => {
     const bad = { version: 1, savedAt: "", input: { ...SAMPLE_INPUT, groupA: { ...SAMPLE_INPUT.groupA, values: [] } }, config: DEFAULT_CONFIG };
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(bad));
     render(<PresentationDeck />);
-    expect(screen.getByText("Saved analysis cannot be used")).toBeTruthy();
+    expect(screen.getByText("Saved Analysis Cannot Be Used")).toBeTruthy();
   });
 
   it("updates when the calculator saves a new analysis", () => {
     render(<PresentationDeck />);
-    expect(screen.getByText("No saved analysis yet")).toBeTruthy();
+    expect(screen.getByText("No Saved Analysis Yet")).toBeTruthy();
     act(() => {
       saveAnalysis(SAMPLE_INPUT, DEFAULT_CONFIG);
     });

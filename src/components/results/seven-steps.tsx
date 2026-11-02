@@ -30,7 +30,7 @@ export const SHOW_SOLUTION_EVENT = "mann-whitney:show-solution";
 
 const STEP_COUNT = 7;
 /** Short names for the step navigation bar. */
-const NAV_LABELS = ["Hypotheses", "Level of significance", "Data", "Test statistic used", "Calculate", "Decision", "Conclusion"];
+const NAV_LABELS = ["Hypotheses", "Level of Significance", "Data", "Test Statistic Used", "Calculate", "Decision", "Conclusion"];
 
 const StepsContext = createContext<{ open: boolean[]; toggle: (n: number) => void }>({
   open: Array(STEP_COUNT).fill(true),
@@ -274,7 +274,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 id="seven-steps-heading" className="text-xl font-semibold text-ink">
-            Step-by-step solution
+            Step-by-Step Solution
           </h2>
           <p className="mt-1 text-sm text-muted">
             Each step shows its answer. Click a step to see the full working.
@@ -313,7 +313,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </ol>
       </nav>
 
-      <Step number={1} title="State the null hypothesis and alternative hypothesis" summary={summaries[0]}>
+      <Step number={1} title="State the Null Hypothesis and Alternative Hypothesis" summary={summaries[0]}>
         <Formula label="Null hypothesis (H₀)">
           <span className="font-sans">{interpretation.nullHypothesis}</span>
         </Formula>
@@ -323,7 +323,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         <p className="text-sm text-muted">Test direction: {alternativeLabel(config.alternative)}.</p>
       </Step>
 
-      <Step number={2} title="State the level of significance" summary={summaries[1]}>
+      <Step number={2} title="State the Level of Significance" summary={summaries[1]}>
         <Formula>α = {alpha}</Formula>
         <p>
           We accept a {alphaPercent}% risk of rejecting H₀ when it is actually true (a Type I error). The p-value will be
@@ -331,7 +331,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
 
-      <Step number={3} title="Write the data" summary={summaries[2]}>
+      <Step number={3} title="Write the Data" summary={summaries[2]}>
         <div className="grid gap-4 md:grid-cols-2">
           {(["A", "B"] as const).map((g) => {
             const group = g === "A" ? result.input.groupA : result.input.groupB;
@@ -355,7 +355,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         <p className="font-mono text-sm text-ink-soft">N = n₁ + n₂ = {u.n1} + {u.n2} = {u.N}</p>
       </Step>
 
-      <Step number={4} title="Test statistic used" summary={summaries[3]}>
+      <Step number={4} title="Test Statistic Used" summary={summaries[3]}>
         <p>
           <strong className="text-ink">Mann–Whitney U test</strong> (also called the Wilcoxon rank-sum test). It is a
           nonparametric test for two independent samples: it does not assume the data are normally distributed, and it
@@ -372,7 +372,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
 
-      <Step number={5} title="Calculate the test statistic and determine the critical table value" summary={summaries[4]}>
+      <Step number={5} title="Calculate the Test Statistic and Determine the Critical Table Value" summary={summaries[4]}>
         <SubHeading>a. Combine, sort, and rank all scores</SubHeading>
         <p>
           All {u.N} scores are combined and sorted from lowest to highest. Ranks start at 1. Tied scores receive the
@@ -478,7 +478,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </div>
       </Step>
 
-      <Step number={6} title="Make a decision" summary={summaries[5]}>
+      <Step number={6} title="Make a Decision" summary={summaries[5]}>
         {p === null ? (
           <Notice level="warning">{typographicMinus(interpretation.decisionExplanation)}</Notice>
         ) : (

@@ -17,7 +17,7 @@ export default function CriticalValuesPage() {
       />
       <div className="space-y-5">
         <Card>
-          <CardHeader title="How to use this table" />
+          <CardHeader title="How to Use This Table" />
           <ol className="list-decimal space-y-1.5 py-4 pr-5 pl-10 text-[15px] leading-relaxed text-ink-soft">
             <li>Choose the table that matches your test: two-tailed or one-tailed, and your α.</li>
             <li>Find the row for n₁ (size of Group A) and the column for n₂ (size of Group B).</li>

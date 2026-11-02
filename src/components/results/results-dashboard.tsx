@@ -124,7 +124,7 @@ export function ResultsDashboard({ result, isStale }: { result: MannWhitneyResul
 
       <div className="grid gap-5 lg:grid-cols-5">
         <Card className="lg:col-span-3" aria-labelledby="decision-panel-title">
-          <CardHeader id="decision-panel-title" title="Decision summary" />
+          <CardHeader id="decision-panel-title" title="Decision Summary" />
           <dl className="px-5 py-1">
             <Row label="Significance level">α = {formatAlpha(config.alpha)}</Row>
             <Row label="P-value">
@@ -159,7 +159,7 @@ export function ResultsDashboard({ result, isStale }: { result: MannWhitneyResul
         </Card>
 
         <Card className="lg:col-span-2" aria-labelledby="effect-size-title">
-          <CardHeader id="effect-size-title" title="Effect sizes" />
+          <CardHeader id="effect-size-title" title="Effect Sizes" />
           <dl className="px-5 py-1">
             <Row label="Rank-biserial">
               <span className="font-mono font-semibold tabular-nums">

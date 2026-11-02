@@ -7,12 +7,12 @@ import { Glossary, HowToUse } from "@/components/guide/student-guide";
 const FEATURES = [
   {
     icon: ListOrdered,
-    title: "Step-by-step solution",
+    title: "Step-by-Step Solution",
     text: "Hypotheses, significance level, data, test, computation, decision, and conclusion, generated from your data.",
   },
   {
     icon: Sigma,
-    title: "Complete computations",
+    title: "Complete Computations",
     text: "Average ranks for ties, rank sums, U₁, U₂, tie-corrected normal approximation, and a tie-aware exact p-value.",
   },
   {
@@ -22,7 +22,7 @@ const FEATURES = [
   },
   {
     icon: ShieldCheck,
-    title: "Private by design",
+    title: "Private by Design",
     text: "All calculations run in your browser. Your data is never sent to a server.",
   },
 ];
