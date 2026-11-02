@@ -4,6 +4,7 @@ import { displayNumber, formatAlpha, formatFixed, formatPValue, typographicMinus
 import { alternativeLabel, methodDescription } from "@/lib/utils/result-labels";
 import { Card, Formula, GroupDot, Notice } from "@/components/ui/primitives";
 import { RankingTable } from "./ranking-table";
+import { normalSf } from "@/lib/statistics/normal-distribution";
 
 const MAX_TERMS = 24;
 
@@ -68,17 +69,45 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
       <Formula label="Mean of U">
         μ<sub>U</sub> = n₁n₂ / 2 = {u.n1} × {u.n2} / 2 = {num(asymptotic.mean)}
       </Formula>
+      {ranking.hasTies && (
+        <Formula label="Tie correction term: for each tied score, t = how many times it appears">
+          {ranking.tieGroups.map((t) => (
+            <span key={t.value} className="block">
+              Score {displayNumber(t.value, 6)}: t = {t.count} → {t.count}³ − {t.count} = {t.count ** 3 - t.count}
+            </span>
+          ))}
+          <span className="mt-1 block font-semibold">
+            Σ(t³ − t) = {ranking.tieGroups.map((t) => t.count ** 3 - t.count).join(" + ")} = {ranking.tieCorrectionTerm}
+          </span>
+        </Formula>
+      )}
       <Formula label={ranking.hasTies ? "Variance of U (with tie correction)" : "Variance of U"}>
         {ranking.hasTies ? (
           <>
-            σ²<sub>U</sub> = (n₁n₂ / 12)·[(N + 1) − Σ(t³ − t) / (N(N − 1))] = ({u.n1 * u.n2} / 12)·[{u.N + 1} −{" "}
-            {ranking.tieCorrectionTerm} / {u.N * (u.N - 1)}] = {fx(asymptotic.variance)}
+            <span className="block">σ²<sub>U</sub> = (n₁n₂ / 12) × [(N + 1) − Σ(t³ − t) / (N(N − 1))]</span>
+            <span className="block">
+              = ({u.n1 * u.n2} / 12) × [{u.N + 1} − {ranking.tieCorrectionTerm} / ({u.N} × {u.N - 1})]
+            </span>
+            <span className="block">
+              = {fx((u.n1 * u.n2) / 12)} × [{u.N + 1} − {fx(ranking.tieCorrectionTerm / (u.N * (u.N - 1)))}]
+            </span>
+            <span className="block">
+              = {fx((u.n1 * u.n2) / 12)} × {fx(u.N + 1 - ranking.tieCorrectionTerm / (u.N * (u.N - 1)))}
+            </span>
+            <span className="block">= {fx(asymptotic.variance)}</span>
           </>
         ) : (
           <>
-            σ²<sub>U</sub> = n₁n₂(N + 1) / 12 = {u.n1 * u.n2} × {u.N + 1} / 12 = {fx(asymptotic.variance)}
+            <span className="block">σ²<sub>U</sub> = n₁n₂(N + 1) / 12</span>
+            <span className="block">
+              = {u.n1} × {u.n2} × {u.N + 1} / 12 = {num(u.n1 * u.n2 * (u.N + 1))} / 12
+            </span>
+            <span className="block">= {fx(asymptotic.variance)}</span>
           </>
         )}
+        <span className="mt-1 block font-sans text-xs text-muted">
+          Computed without rounding the in-between values; rounding them by hand can change the last digit.
+        </span>
       </Formula>
       <Formula label="Standard deviation">
         σ<sub>U</sub> = √{fx(asymptotic.variance)} = {fx(asymptotic.standardDeviation)}
@@ -98,7 +127,15 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
       </Formula>
       <Formula highlight label={`p-value (${alternativeLabel(config.alternative).toLowerCase()})`}>
         {config.alternative === "two-sided" && (
-          <>p = 2 × P(Z ≥ |z|) = 2 × P(Z ≥ {fx(Math.abs(asymptotic.z))}) = {formatPValue(asymptotic.pValue)}</>
+          <>
+            <span className="block">
+              One tail (from the standard normal table): P(Z ≥ {fx(Math.abs(asymptotic.z))}) ={" "}
+              {formatPValue(normalSf(Math.abs(asymptotic.z)))}
+            </span>
+            <span className="block">
+              p = 2 × P(Z ≥ |z|) = 2 × {formatPValue(normalSf(Math.abs(asymptotic.z)))} = {formatPValue(asymptotic.pValue)}
+            </span>
+          </>
         )}
         {config.alternative === "greater" && (
           <>p = P(Z ≥ z) = P(Z ≥ {fx(asymptotic.z)}) = {formatPValue(asymptotic.pValue)}</>
@@ -127,12 +164,14 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
   const cv = result.criticalValue;
 
   return (
-    <section aria-labelledby="seven-steps-heading" className="space-y-5">
+    <section id="solution" aria-labelledby="seven-steps-heading" className="scroll-mt-24 space-y-5">
       <div>
         <h2 id="seven-steps-heading" className="text-xl font-semibold text-ink">
-          Seven-step analysis
+          Step-by-step solution
         </h2>
-        <p className="mt-1 text-sm text-muted">The complete procedure, computed from the data above.</p>
+        <p className="mt-1 text-sm text-muted">
+          The complete seven-step solution, computed from the data above. Follow it to solve the same problem by hand.
+        </p>
       </div>
 
       <Step number={1} title="State the hypotheses">
@@ -244,8 +283,8 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
           <Formula label="Check">
             U₁ + U₂ = {num(u.U1)} + {num(u.U2)} = {num(u.U1 + u.U2)} = n₁ × n₂ = {u.n1} × {u.n2} ✓
           </Formula>
-          <Formula highlight label="Test statistic (smaller U)">
-            U = min(U₁, U₂) = min({num(u.U1)}, {num(u.U2)}) = <strong>{num(u.U)}</strong>
+          <Formula highlight label="Test statistic U (the smaller of U₁ and U₂)">
+            U = smaller of (U₁, U₂) = smaller of ({num(u.U1)}, {num(u.U2)}) = <strong>{num(u.U)}</strong>
           </Formula>
         </div>
 

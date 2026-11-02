@@ -3,42 +3,90 @@ import { Card, CardHeader, Formula, PageHeader } from "@/components/ui/primitive
 
 export const metadata: Metadata = { title: "Method Notes" };
 
-/** The seven steps, in the same order as the calculator's analysis. */
-const PROCEDURE: { title: string; text: string; formula?: string; key?: boolean }[] = [
+interface ProcedureStep {
+  title: string;
+  text: string;
+  /** Numbered sub-steps, written out in full sentences. */
+  substeps?: string[];
+  formulas?: string[];
+  /** Highlight the formulas as key results. */
+  key?: boolean;
+}
+
+/**
+ * The seven steps, in the same order as the calculator's analysis.
+ * Written in full words (no abbreviations) so students can study from it.
+ */
+const PROCEDURE: ProcedureStep[] = [
   {
     title: "State the hypotheses",
-    text: "Write H₀ (no difference between the two groups) and H₁ (there is a difference). For a one-sided test, H₁ states a direction, e.g. Group A tends to score higher than Group B.",
-    formula: "H₀: no difference      H₁: there is a difference (two-sided)",
+    text: "Write the null hypothesis (H₀) and the alternative hypothesis (H₁). The null hypothesis says there is no difference between the two groups. The alternative hypothesis says there is a difference.",
+    substeps: [
+      "Two-tailed (two-sided) test: H₁ says the groups differ, without saying which group is higher.",
+      "One-tailed (one-sided) test: H₁ states a direction, for example: “The scores of Group A tend to be higher than the scores of Group B.”",
+    ],
+    formulas: [
+      "H₀: There is no significant difference between the two groups.",
+      "H₁: There is a significant difference between the two groups.",
+    ],
   },
   {
     title: "Set the level of significance",
-    text: "Choose α, the risk you accept of rejecting H₀ when it is actually true. The usual choice is 0.05.",
-    formula: "α = 0.05",
+    text: "Choose alpha (α), the level of significance. Alpha is the risk we accept of rejecting the null hypothesis when it is actually true (a Type I error). The usual choice is 0.05, which means a 5% risk.",
+    formulas: ["α = 0.05"],
   },
   {
     title: "List the given data",
-    text: "Write the scores of each group and count them: n₁ for Group A, n₂ for Group B, and N = n₁ + n₂.",
-    formula: "N = n₁ + n₂",
+    text: "Write the scores of each group and count how many scores each group has.",
+    substeps: [
+      "n₁ is the number of scores in Group A.",
+      "n₂ is the number of scores in Group B.",
+      "N is the total number of scores in both groups.",
+    ],
+    formulas: ["N = n₁ + n₂"],
   },
   {
     title: "Name the statistical test",
-    text: "Mann–Whitney U test: a nonparametric test for two independent samples. It uses ranks, so the data do not need to be normally distributed.",
+    text: "Use the Mann–Whitney U test. It is a nonparametric test for two independent samples: the two groups contain different people, and the data do not need to follow a normal distribution. The test compares the ranks of the scores, not their means.",
   },
   {
     title: "Compute the test statistic",
-    text: "Combine all scores, sort them from lowest to highest, and rank them from 1 to N. Tied scores get the average of their positions. Add the ranks of each group (R₁, R₂), compute U₁ and U₂, and take the smaller one. Then find the p-value (normal approximation: z = (U₁ − μ ± 0.5) / σ).",
-    formula: "U₁ = R₁ − n₁(n₁ + 1)/2    U₂ = R₂ − n₂(n₂ + 1)/2    U = min(U₁, U₂)",
+    text: "Follow these steps in order.",
+    substeps: [
+      "Combine the scores of both groups into one list.",
+      "Sort the combined list from the lowest score to the highest score.",
+      "Give each score a rank: the lowest score gets rank 1, the next gets rank 2, and so on up to N.",
+      "If two or more scores are equal (tied), give each of them the average of the positions they occupy. For example, if two scores share positions 4 and 5, each gets rank (4 + 5) ÷ 2 = 4.5.",
+      "Add the ranks that belong to Group A to get R₁, and the ranks that belong to Group B to get R₂. Check: R₁ + R₂ must equal N(N + 1) ÷ 2.",
+      "Compute U₁ for Group A and U₂ for Group B with the formulas below. Check: U₁ + U₂ must equal n₁ × n₂.",
+      "The test statistic U is the smaller of U₁ and U₂.",
+      "Find the p-value. With the normal approximation, compute the mean of U (μ), the standard deviation of U (σ), and the z-score, then read the probability from the standard normal table.",
+    ],
+    formulas: [
+      "U₁ = R₁ − n₁(n₁ + 1) ÷ 2",
+      "U₂ = R₂ − n₂(n₂ + 1) ÷ 2",
+      "U = the smaller of U₁ and U₂",
+      "Mean of U:  μ = (n₁ × n₂) ÷ 2",
+      "Standard deviation of U (no ties):  σ = √[ n₁ × n₂ × (N + 1) ÷ 12 ]",
+      "z = (U₁ − μ ± 0.5) ÷ σ     (the 0.5 is the continuity correction, applied toward zero)",
+      "Two-tailed p-value = 2 × (probability that Z is at least as large as |z|)",
+    ],
     key: true,
   },
   {
     title: "Make the statistical decision",
-    text: "Compare the p-value with α. If p ≤ α, reject H₀. If p > α, fail to reject H₀ (this does not prove H₀ is true). You can also compare U with the critical value: reject H₀ if U ≤ critical value.",
-    formula: "p ≤ α → Reject H₀      p > α → Fail to reject H₀",
+    text: "Compare the p-value with alpha.",
+    substeps: [
+      "If the p-value is less than or equal to alpha, reject the null hypothesis.",
+      "If the p-value is greater than alpha, fail to reject the null hypothesis. This does not prove the null hypothesis is true; it means the sample does not give enough evidence against it.",
+      "Using the critical-value method instead: reject the null hypothesis if U is less than or equal to the critical value from the Mann–Whitney table. Both methods give the same decision.",
+    ],
+    formulas: ["p ≤ α  →  Reject H₀", "p > α  →  Fail to reject H₀"],
     key: true,
   },
   {
     title: "Write the conclusion",
-    text: "State the result in words using the group names, the U and p values, and which group tended to score higher. Describe only the observed samples; do not claim that one group is better in general or that one caused the other.",
+    text: "State the result in complete sentences, using the names of the groups, the values of U and p, and which group tended to have higher scores. Describe only what the sample shows. Do not claim that one group is better in general, or that one thing caused the difference.",
   },
 ];
 
@@ -74,7 +122,22 @@ export default function AboutPage() {
                 <div className="min-w-0 flex-1 space-y-2 text-[15px] leading-relaxed text-ink-soft">
                   <h3 className="text-lg text-ink">{step.title}</h3>
                   <p>{step.text}</p>
-                  {step.formula && <Formula highlight={step.key}>{step.formula}</Formula>}
+                  {step.substeps && (
+                    <ol className="list-[lower-alpha] space-y-1 pl-6 marker:text-muted">
+                      {step.substeps.map((s) => (
+                        <li key={s}>{s}</li>
+                      ))}
+                    </ol>
+                  )}
+                  {step.formulas && (
+                    <div className="space-y-1.5">
+                      {step.formulas.map((f) => (
+                        <Formula key={f} highlight={step.key}>
+                          {f}
+                        </Formula>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </li>
             ))}
@@ -82,14 +145,14 @@ export default function AboutPage() {
         </Card>
 
         <Section title="Ranking and U statistics">
-          <p>Both groups are combined and sorted in ascending order. Ranks start at 1; tied scores receive the average of the positions they occupy (e.g. 10, 12, 12, 15 → 1, 2.5, 2.5, 4).</p>
-          <Formula>U₁ = R₁ − n₁(n₁ + 1) / 2 &nbsp;&nbsp; U₂ = R₂ − n₂(n₂ + 1) / 2 &nbsp;&nbsp; U = min(U₁, U₂)</Formula>
+          <p>Both groups are combined and sorted in ascending order. Ranks start at 1; tied scores receive the average of the positions they occupy (for example, the scores 10, 12, 12, 15 get the ranks 1, 2.5, 2.5, 4).</p>
+          <Formula>U₁ = R₁ − n₁(n₁ + 1) / 2 &nbsp;&nbsp; U₂ = R₂ − n₂(n₂ + 1) / 2 &nbsp;&nbsp; U = the smaller of U₁ and U₂</Formula>
           <p>Checks performed on every calculation: R₁ + R₂ = N(N + 1)/2 and U₁ + U₂ = n₁n₂. Group A is always group 1.</p>
         </Section>
 
         <Section title="Normal approximation (default)">
           <Formula>μ = n₁n₂ / 2 &nbsp;&nbsp; σ² = (n₁n₂ / 12)·[(N + 1) − Σ(t³ − t) / (N(N − 1))]</Formula>
-          <p>t is the number of observations sharing a tied value. The continuity correction (on by default) moves U₁ − μ by 0.5 toward zero for the chosen alternative, the same convention as R&apos;s <code>wilcox.test(correct = TRUE)</code>. Two-sided p = 2·min(Φ(z), 1 − Φ(z)). A warning is shown when either group has fewer than 10 observations.</p>
+          <p>t is the number of observations sharing a tied value. The continuity correction (on by default) moves U₁ − μ by 0.5 toward zero for the chosen alternative, the same convention as R&apos;s <code>wilcox.test(correct = TRUE)</code>. Two-sided p-value = 2 × the smaller of Φ(z) and 1 − Φ(z), where Φ(z) is the probability that a standard normal value is at most z. A warning is shown when either group has fewer than 10 observations.</p>
         </Section>
 
         <Section title="Exact permutation test">

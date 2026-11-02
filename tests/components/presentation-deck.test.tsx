@@ -126,17 +126,12 @@ describe("PresentationDeck — navigation", () => {
     expect(screen.getByRole("button", { name: "Go to slide 6: Computation" }).getAttribute("aria-current")).toBe("step");
   });
 
-  it("does not change slides while typing presenter details", async () => {
-    const user = userEvent.setup();
+  it("has no presenter name or course fields on the title slide", () => {
     renderWithSample();
-    const name = screen.getByPlaceholderText("Add your name");
-    await user.type(name, "Juan Dela Cruz ");
-    fireEvent.keyDown(name, { key: "ArrowRight" });
-    expect(counter()).toBe("1 / 8");
-    expect((name as HTMLInputElement).value).toBe("Juan Dela Cruz ");
-    // Kept for this tab only (sessionStorage), not in localStorage.
-    expect(window.sessionStorage.getItem("mann-whitney-calculator:presenter")).toContain("Juan Dela Cruz");
-    expect(window.localStorage.getItem(STORAGE_KEY)).not.toContain("Juan");
+    expect(screen.queryByText("Presented by")).toBeNull();
+    expect(screen.queryByText("Course / Section")).toBeNull();
+    expect(screen.queryByPlaceholderText("Add your name")).toBeNull();
+    expect(screen.getByTestId("slide").querySelector("input")).toBeNull();
   });
 
   it("has an Exit Presentation link back to the calculator", () => {
@@ -184,7 +179,7 @@ describe("PresentationDeck — approved sample content on all 8 slides", () => {
 
     expect(s6).toContain("U₁ = R₁ − n₁(n₁ + 1)/2 = 60 − 55 = 5");
     expect(s6).toContain("U₂ = R₂ − n₂(n₂ + 1)/2 = 150 − 55 = 95");
-    expect(s6).toContain("U = min(U₁, U₂) = min(5, 95) = 5");
+    expect(s6).toContain("U = smaller of (U₁, U₂) = smaller of (5, 95) = 5");
     expect(s6).toContain("z = (5 − 50 + 0.5) / 13.1839 = −3.3753");
     expect(s6).toContain("p = 2 × P(Z ≥ 3.3753) = 0.00074");
     expect(s6).toContain("exact permutation gives p = 0.00024");

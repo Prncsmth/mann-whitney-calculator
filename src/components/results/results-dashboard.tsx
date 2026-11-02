@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CheckCircle2, CircleSlash, MonitorPlay } from "lucide-react";
+import { CheckCircle2, CircleSlash, ListOrdered, MonitorPlay } from "lucide-react";
 import type { CriticalValueResult, MannWhitneyResult } from "@/types/statistics";
 import { displayNumber, formatAlpha, formatFixed, formatPValue, typographicMinus, withMinus } from "@/lib/utils/format";
 import { alternativeLabel, methodDescription, methodName } from "@/lib/utils/result-labels";
@@ -68,10 +68,16 @@ export function ResultsDashboard({ result, isStale }: { result: MannWhitneyResul
             {methodDescription(result)} · {alternativeLabel(config.alternative)} · α = {formatAlpha(config.alpha)}
           </p>
         </div>
-        <Link href="/presentation" className={buttonStyles.primary}>
-          <MonitorPlay className="h-4 w-4" aria-hidden />
-          Start Presentation
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <a href="#solution" className={buttonStyles.secondary}>
+            <ListOrdered className="h-4 w-4" aria-hidden />
+            Show Solution
+          </a>
+          <Link href="/presentation" className={buttonStyles.primary}>
+            <MonitorPlay className="h-4 w-4" aria-hidden />
+            Start Presentation
+          </Link>
+        </div>
       </div>
 
       {isStale && (

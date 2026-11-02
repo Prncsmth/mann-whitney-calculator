@@ -15,7 +15,7 @@ const STEPS = [
   {
     icon: Calculator,
     title: "Press Calculate",
-    text: "Read the decision first, then scroll down through the seven steps to see how every number was found.",
+    text: "Read the decision first, then press Show Solution to see the full seven-step solution and how every number was found.",
   },
   {
     icon: MonitorPlay,
@@ -54,7 +54,7 @@ export function HowToUse({ compact = false }: { compact?: boolean }) {
 const TERMS: { term: string; meaning: string }[] = [
   { term: "Independent groups", meaning: "Two separate sets of people or items. Nobody appears in both groups." },
   { term: "Rank", meaning: "A score's position after sorting all scores from lowest (rank 1) to highest." },
-  { term: "Tied ranks", meaning: "Equal scores share the average of the positions they occupy, e.g. positions 4 and 5 → 4.5." },
+  { term: "Tied ranks", meaning: "Equal scores share the average of the positions they occupy. For example, two scores in positions 4 and 5 both get rank 4.5." },
   { term: "R₁, R₂ (rank sums)", meaning: "The total of the ranks in Group A and in Group B." },
   { term: "U statistic", meaning: "Counts how often a score from one group is higher than a score from the other. The smaller U is the test statistic." },
   { term: "α (significance level)", meaning: "The risk we accept of saying there is a difference when there really is none. Usually 0.05 (5%)." },

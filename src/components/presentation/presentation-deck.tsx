@@ -6,24 +6,8 @@ import { ChevronLeft, ChevronRight, Maximize, Minimize, X } from "lucide-react";
 import { useSavedAnalysis } from "@/hooks/use-saved-analysis";
 import { useFullscreen } from "@/hooks/use-fullscreen";
 import { buttonStyles } from "@/components/ui/primitives";
-import { SLIDES, type PresenterInfo } from "./slides";
+import { SLIDES } from "./slides";
 import { ForestLine } from "./forest-line";
-
-const PRESENTER_KEY = "mann-whitney-calculator:presenter";
-
-/** Presenter name/course live only in this tab (sessionStorage), never in localStorage. */
-function readPresenterInfo(): PresenterInfo {
-  try {
-    const raw = window.sessionStorage.getItem(PRESENTER_KEY);
-    const parsed = raw ? JSON.parse(raw) : null;
-    if (parsed && typeof parsed.presenter === "string" && typeof parsed.course === "string") {
-      return { presenter: parsed.presenter.slice(0, 80), course: parsed.course.slice(0, 80) };
-    }
-  } catch {
-    // unavailable or malformed: start empty
-  }
-  return { presenter: "", course: "" };
-}
 
 function isTypingTarget(target: EventTarget | null) {
   return (
@@ -50,23 +34,11 @@ export function PresentationDeck() {
   const saved = useSavedAnalysis();
   const fullscreen = useFullscreen();
   const [index, setIndex] = useState(0);
-  const [presenterInfo, setPresenterInfo] = useState<PresenterInfo>(() =>
-    typeof window === "undefined" ? { presenter: "", course: "" } : readPresenterInfo(),
-  );
   const last = SLIDES.length - 1;
 
   const go = useCallback((i: number) => setIndex(Math.min(last, Math.max(0, i))), [last]);
   const next = useCallback(() => setIndex((i) => Math.min(last, i + 1)), [last]);
   const prev = useCallback(() => setIndex((i) => Math.max(0, i - 1)), []);
-
-  const updatePresenterInfo = (info: PresenterInfo) => {
-    setPresenterInfo(info);
-    try {
-      window.sessionStorage.setItem(PRESENTER_KEY, JSON.stringify(info));
-    } catch {
-      // keep it in memory only
-    }
-  };
 
   const ready = saved.status === "ready";
   const { toggle: toggleFullscreen, supported: fullscreenSupported } = fullscreen;
@@ -175,7 +147,7 @@ export function PresentationDeck() {
           className="relative z-10 m-auto w-full max-w-[min(92vw,1720px)] px-4 py-8 sm:px-[4vw]"
           data-testid="slide"
         >
-          {slide.render({ result: saved.result, presenterInfo, onPresenterInfoChange: updatePresenterInfo })}
+          {slide.render({ result: saved.result })}
         </div>
       </main>
 

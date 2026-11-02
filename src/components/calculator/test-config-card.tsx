@@ -127,7 +127,7 @@ export function TestConfigCard({
                 inputMode="decimal"
                 value={customAlpha}
                 onChange={(e) => onCustomAlpha(e.target.value)}
-                placeholder="e.g. 0.025"
+                placeholder="For example: 0.025"
                 aria-invalid={alphaError ? true : undefined}
                 aria-describedby={alphaError ? "custom-alpha-error" : undefined}
                 className={`w-full rounded-md border bg-surface px-3 py-2 font-mono text-[15px] focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 ${

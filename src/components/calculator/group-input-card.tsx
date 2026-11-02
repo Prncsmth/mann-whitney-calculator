@@ -85,7 +85,7 @@ export function GroupInputCard({
             type="text"
             value={values.description}
             onChange={(e) => onChange("description", e.target.value)}
-            placeholder="e.g. Quiz scores of students taught by lecture"
+            placeholder="For example: Quiz scores of students taught by lecture"
             aria-invalid={descriptionError ? true : undefined}
             aria-describedby={descriptionError ? `${id}-description-error` : undefined}
             className={`${inputClass} ${descriptionError ? "border-danger" : "border-line-strong"}`}

@@ -202,6 +202,29 @@ describe("CalculatorWorkspace — sample dataset results", () => {
     expect(resultsHeading()).toBeNull();
   });
 
+  it("shows the full hand-calculation in the step-by-step solution", async () => {
+    const { user, calculate } = setup();
+    await user.click(screen.getByRole("button", { name: "Load Sample Data" }));
+    await calculate();
+
+    const solution = document.getElementById("solution")!;
+    expect(screen.getByRole("heading", { name: "Step-by-step solution", level: 2 })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Show Solution" }).getAttribute("href")).toBe("#solution");
+
+    const text = solution.textContent ?? "";
+    // Tie correction: 12 (×2), 14 (×3), 15, 16, 17, 18 (×2 each)
+    expect(text).toContain("Score 14: t = 3 → 3³ − 3 = 24");
+    expect(text).toContain("Σ(t³ − t) = 6 + 24 + 6 + 6 + 6 + 6 = 54");
+    // Variance worked out step by step
+    expect(text).toContain("= (100 / 12) × [21 − 54 / (20 × 19)]");
+    expect(text).toContain("= 8.3333 × [21 − 0.1421]");
+    expect(text).toContain("= 8.3333 × 20.8579");
+    expect(text).toContain("= 173.8158");
+    // One tail from the normal table, then doubled
+    expect(text).toContain("P(Z ≥ 3.3753) = 0.00037");
+    expect(text).toContain("p = 2 × P(Z ≥ |z|) = 2 × 0.00037 = 0.00074");
+  });
+
   it("links to Presentation Mode from the results", async () => {
     const { user, calculate } = setup();
     await user.click(screen.getByRole("button", { name: "Load Sample Data" }));

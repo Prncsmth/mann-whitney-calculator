@@ -16,14 +16,9 @@ export function RankingTable({ result }: { result: MannWhitneyResult }) {
         <caption className="sr-only">Combined observations sorted in ascending order with assigned ranks</caption>
         <thead className="bg-subtle text-left text-xs font-medium tracking-wide text-muted">
           <tr>
-            <th scope="col" className={`${cell} py-2.5`}>
-              <span className="sm:hidden">#</span>
-              <span className="hidden sm:inline">Position</span>
-            </th>
-            <th scope="col" className={`${cell} py-2.5`}>
-              <span className="sm:hidden">Obs.</span>
-              <span className="hidden sm:inline">Observation</span>
-            </th>
+            <th scope="col" className={`${cell} py-2.5`}>Position</th>
+            {/* The observation label (A1, B7…) is hidden on phones so Score and Rank fit. */}
+            <th scope="col" className={`${cell} hidden py-2.5 sm:table-cell`}>Observation</th>
             <th scope="col" className={`${cell} py-2.5`}>Group</th>
             <th scope="col" className={`${cell} py-2.5 text-right`}>Score</th>
             <th scope="col" className={`${cell} py-2.5 text-right`}>Rank</th>
@@ -33,7 +28,7 @@ export function RankingTable({ result }: { result: MannWhitneyResult }) {
           {result.ranking.sorted.map((o) => (
             <tr key={o.id} className={`border-t border-line ${o.tied ? "bg-warn-soft/60" : ""}`}>
               <td className={`${cell} font-mono text-muted tabular-nums`}>{o.sortedPosition}</td>
-              <td className={`${cell} font-mono tabular-nums`}>{o.id}</td>
+              <td className={`${cell} hidden font-mono tabular-nums sm:table-cell`}>{o.id}</td>
               <td className={cell}>
                 <span className="flex items-center gap-2">
                   <GroupDot group={o.group} />

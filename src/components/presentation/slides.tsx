@@ -7,15 +7,8 @@ import { methodDescription, methodName } from "@/lib/utils/result-labels";
 import { GroupDot } from "@/components/ui/primitives";
 import { SlideFormula, SlideHeading, SlideLabel, SlidePanel, SlideWarning } from "./slide-parts";
 
-export interface PresenterInfo {
-  presenter: string;
-  course: string;
-}
-
 export interface SlideProps {
   result: MannWhitneyResult;
-  presenterInfo: PresenterInfo;
-  onPresenterInfoChange: (info: PresenterInfo) => void;
 }
 
 export interface SlideDefinition {
@@ -34,19 +27,7 @@ function researchProblem(result: MannWhitneyResult): string {
 }
 
 /* ---------- 1. Title ---------- */
-function TitleSlide({ result, presenterInfo, onPresenterInfoChange }: SlideProps) {
-  const field = (key: keyof PresenterInfo, label: string, placeholder: string) => (
-    <label className="block">
-      <span className="st-small block text-muted">{label}</span>
-      <input
-        value={presenterInfo[key]}
-        onChange={(e) => onPresenterInfoChange({ ...presenterInfo, [key]: e.target.value })}
-        placeholder={placeholder}
-        maxLength={80}
-        className="st-lead w-full border-b border-dashed border-transparent bg-transparent font-medium text-ink placeholder:font-normal placeholder:text-muted/50 hover:border-line-strong focus:border-accent focus:outline-none"
-      />
-    </label>
-  );
+function TitleSlide({ result }: SlideProps) {
   return (
     <div className="st-gap flex flex-col">
       <div>
@@ -54,13 +35,9 @@ function TitleSlide({ result, presenterInfo, onPresenterInfoChange }: SlideProps
         <h1 className="st-hero mt-[0.25em] font-semibold tracking-tight text-ink">Mann–Whitney U Test</h1>
         <p className="st-lead mt-[0.8em] max-w-[52em] text-ink-soft">
           A nonparametric test of whether two independent groups differ, based on the ranks of their scores rather than
-          on the raw values. Today: <strong className="font-semibold text-ink">{result.input.groupA.name}</strong> vs.{" "}
+          on the raw values. Today: <strong className="font-semibold text-ink">{result.input.groupA.name}</strong> versus{" "}
           <strong className="font-semibold text-ink">{result.input.groupB.name}</strong>.
         </p>
-      </div>
-      <div className="grid max-w-[60em] gap-[1.2em] sm:grid-cols-2">
-        {field("presenter", "Presented by", "Add your name")}
-        {field("course", "Course / Section", "Add course information")}
       </div>
     </div>
   );
@@ -275,7 +252,7 @@ function ComputationSlide({ result }: SlideProps) {
               U₂ = R₂ − n₂(n₂ + 1)/2 = {num(u.R2)} − {num((u.n2 * (u.n2 + 1)) / 2)} = {num(u.U2)}
             </SlideFormula>
             <SlideFormula label="Test statistic" strong>
-              U = min(U₁, U₂) = min({num(u.U1)}, {num(u.U2)}) = {num(u.U)}
+              U = smaller of (U₁, U₂) = smaller of ({num(u.U1)}, {num(u.U2)}) = {num(u.U)}
             </SlideFormula>
           </div>
         </SlidePanel>

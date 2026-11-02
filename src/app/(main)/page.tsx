@@ -7,7 +7,7 @@ import { Glossary, HowToUse } from "@/components/guide/student-guide";
 const FEATURES = [
   {
     icon: ListOrdered,
-    title: "Seven-step analysis",
+    title: "Step-by-step solution",
     text: "Hypotheses, significance level, data, test, computation, decision, and conclusion, generated from your data.",
   },
   {
