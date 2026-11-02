@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d1513",
-  colorScheme: "dark",
+  themeColor: "#0d1513", // matches the dark sidebar / mobile header
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

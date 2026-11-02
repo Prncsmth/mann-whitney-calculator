@@ -70,12 +70,27 @@ export function StatTile({ label, value, hint, emphasis = false }: {
   );
 }
 
-/** A displayed formula or calculation line. */
-export function Formula({ children, label }: { children: ReactNode; label?: ReactNode }) {
+/**
+ * A displayed formula or calculation line.
+ * `highlight` marks a key result (U, p-value, decision) with a green box.
+ */
+export function Formula({ children, label, highlight = false }: {
+  children: ReactNode;
+  label?: ReactNode;
+  highlight?: boolean;
+}) {
   return (
-    <div className="rounded-md border-l-[3px] border-accent bg-subtle px-4 py-2.5">
-      {label && <div className="mb-0.5 text-xs font-medium text-muted">{label}</div>}
-      <div className="font-mono text-[15px] leading-relaxed wrap-break-word text-ink">{children}</div>
+    <div
+      className={`rounded-md border-l-[3px] border-accent px-4 py-2.5 ${
+        highlight ? "bg-accent-soft ring-1 ring-accent-line" : "bg-subtle"
+      }`}
+    >
+      {label && (
+        <div className={`mb-0.5 text-xs font-medium ${highlight ? "text-accent" : "text-muted"}`}>{label}</div>
+      )}
+      <div className={`font-mono text-[15px] leading-relaxed wrap-break-word text-ink ${highlight ? "font-semibold" : ""}`}>
+        {children}
+      </div>
     </div>
   );
 }

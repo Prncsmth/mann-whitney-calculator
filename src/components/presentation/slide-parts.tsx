@@ -35,8 +35,12 @@ export function SlideFormula({ label, children, strong = false }: {
   strong?: boolean;
 }) {
   return (
-    <div className="border-l-[3px] border-accent pl-[1em]">
-      {label && <p className="st-small text-muted">{label}</p>}
+    <div
+      className={`border-l-[3px] border-accent pl-[1em] ${
+        strong ? "rounded-r-md bg-accent-soft py-[0.35em] pr-[0.8em] ring-1 ring-accent-line" : ""
+      }`}
+    >
+      {label && <p className={`st-small ${strong ? "font-medium text-accent" : "text-muted"}`}>{label}</p>}
       <p className={`st-formula font-mono wrap-break-word ${strong ? "font-semibold text-ink" : "text-ink-soft"}`}>{children}</p>
     </div>
   );

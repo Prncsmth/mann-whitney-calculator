@@ -1,41 +1,61 @@
 @import "tailwindcss";
 
 /*
- * "Misty forest" theme: deep evergreen background, soft fog, sage accents,
- * and an elegant serif for headings. One fixed dark theme (it does not follow
- * the system setting), so every screen recording looks the same.
- *
- * Readability first: body text, numbers and formulas use near-white ink with
- * contrast well above WCAG AA on every surface.
+ * Clean white workspace with a forest-green accent. Only the sidebar (and the
+ * mobile header) use the dark "misty forest" colors, via .theme-forest below.
+ * Important results (decision, U, p-value, conclusion) are highlighted in green.
+ * Fixed light theme so every screen recording looks the same.
  */
 @theme {
+  --color-canvas: #f6f8f7;
+  --color-surface: #ffffff;
+  --color-subtle: #f1f4f2;
+  --color-line: #e1e7e3;
+  --color-line-strong: #c9d3cd;
+
+  --color-ink: #10201a;       /* main text  ~16:1 on white */
+  --color-ink-soft: #2c3d36;  /* body text  ~11:1 */
+  --color-muted: #5c6b64;     /* labels     ~5.6:1 */
+
+  --color-accent: #1f5c45;        /* forest green (buttons, highlights) ~8:1 */
+  --color-accent-hover: #174a37;
+  --color-on-accent: #ffffff;
+  --color-accent-soft: #e8f2ec;
+  --color-accent-line: #bcd6c7;
+
+  /* Group markers: green for Group A, amber for Group B. */
+  --color-group-a: #1f7a57;
+  --color-group-b: #b07a12;
+
+  --color-warn: #7a4f00;
+  --color-warn-soft: #fdf7e7;
+  --color-warn-line: #efdcaa;
+
+  --color-danger: #a8251a;
+  --color-danger-soft: #fdf2f1;
+  --color-danger-line: #f3c7c2;
+}
+
+/* Dark "misty forest" palette, used only by the sidebar and mobile header. */
+.theme-forest {
   --color-canvas: #0d1513;
   --color-surface: #15201c;
-  --color-subtle: #1c2924;
+  --color-subtle: #1f2d28;
   --color-line: #2a3a34;
   --color-line-strong: #3c4f47;
-
-  --color-ink: #edf2ee;       /* main text  ~15:1 on surface */
-  --color-ink-soft: #c9d4cd;  /* body text  ~11:1 */
-  --color-muted: #98aaa1;     /* labels     ~6.8:1 */
-
-  --color-accent: #a9cdb8;        /* pale sage (buttons, highlights) */
+  --color-ink: #edf2ee;
+  --color-ink-soft: #c9d4cd;
+  --color-muted: #98aaa1;
+  --color-accent: #a9cdb8;
   --color-accent-hover: #c0dccb;
-  --color-on-accent: #0d1513;     /* text on accent backgrounds */
-  --color-accent-soft: #1d2f28;
+  --color-on-accent: #0d1513;
+  --color-accent-soft: #1f3129;
   --color-accent-line: #3f5d50;
-
-  /* Group markers: sage for Group A, warm mist-gold for Group B. */
-  --color-group-a: #8fc4a6;
-  --color-group-b: #d8c48f;
-
-  --color-warn: #e9cf8c;
-  --color-warn-soft: #29261a;
-  --color-warn-line: #5a4e2a;
-
-  --color-danger: #f2aaa0;
-  --color-danger-soft: #2d1b19;
-  --color-danger-line: #66352f;
+  background:
+    radial-gradient(ellipse 120% 35% at 20% 0%, rgba(175, 205, 190, 0.14), transparent 70%),
+    linear-gradient(180deg, #1a2723 0%, #0d1513 70%);
+  color: var(--color-ink);
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -45,16 +65,10 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
-  /* Soft fog drifting over a dark forest floor. Fixed so it does not scroll. */
-  background:
-    radial-gradient(ellipse 80% 45% at 15% -5%, rgba(175, 205, 190, 0.13), transparent 70%),
-    radial-gradient(ellipse 60% 35% at 95% 0%, rgba(175, 205, 190, 0.08), transparent 70%),
-    linear-gradient(180deg, #14201c 0%, var(--color-canvas) 55%);
-  background-attachment: fixed;
   background-color: var(--color-canvas);
   color: var(--color-ink);
   font-family: var(--font-sans);
@@ -76,11 +90,8 @@ h3 {
  */
 .slide-root {
   --s: min(1vw, 1.7778vh);
-  /* Mist at the top fading into the dark treeline, as in the reference. */
-  background:
-    radial-gradient(ellipse 70% 40% at 30% 0%, rgba(190, 215, 203, 0.16), transparent 70%),
-    radial-gradient(ellipse 50% 30% at 85% 10%, rgba(190, 215, 203, 0.09), transparent 70%),
-    linear-gradient(180deg, #24332e 0%, #17221e 45%, var(--color-canvas) 100%);
+  /* Clean white slide with a very faint green tint at the top. */
+  background: linear-gradient(180deg, #eef4f0 0%, #ffffff 35%);
 }
 .st-hero { font-size: clamp(34px, calc(var(--s) * 4.8), 96px); line-height: 1.05; }
 .st-title { font-size: clamp(26px, calc(var(--s) * 2.8), 56px); line-height: 1.12; }

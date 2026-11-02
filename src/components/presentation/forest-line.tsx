@@ -48,12 +48,12 @@ export function ForestLine() {
     >
       <defs>
         <linearGradient id="fog-fade" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#0d1513" stopOpacity="0" />
-          <stop offset="1" stopColor="#0d1513" stopOpacity="0.9" />
+          <stop offset="0" stopColor="#ffffff" stopOpacity="0" />
+          <stop offset="1" stopColor="#ffffff" stopOpacity="0.85" />
         </linearGradient>
       </defs>
-      <path d={FAR} fill="#30443c" opacity="0.45" />
-      <path d={NEAR} fill="#16231f" opacity="0.85" />
+      <path d={FAR} fill="#cfe0d6" opacity="0.7" />
+      <path d={NEAR} fill="#a9c7b6" opacity="0.55" />
       <rect x="0" y="0" width="1600" height="320" fill="url(#fog-fade)" />
     </svg>
   );

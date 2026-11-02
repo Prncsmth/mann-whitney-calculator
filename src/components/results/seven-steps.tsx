@@ -96,7 +96,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         {asymptotic.correctionApplied > 0 ? " − 0.5" : asymptotic.correctionApplied < 0 ? " + 0.5" : ""}) /{" "}
         {fx(asymptotic.standardDeviation)} = {fx(asymptotic.z)}
       </Formula>
-      <Formula label={`p-value (${alternativeLabel(config.alternative).toLowerCase()})`}>
+      <Formula highlight label={`p-value (${alternativeLabel(config.alternative).toLowerCase()})`}>
         {config.alternative === "two-sided" && (
           <>p = 2 × P(Z ≥ |z|) = 2 × P(Z ≥ {fx(Math.abs(asymptotic.z))}) = {formatPValue(asymptotic.pValue)}</>
         )}
@@ -117,7 +117,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         C({u.N}, {u.n1}) = {formatCount(exact.distribution.totalAssignments)} such splits. The tied ranks are kept
         exactly as observed.
       </p>
-      <Formula label="Exact p-value">
+      <Formula highlight label="Exact p-value">
         p = proportion of splits with {exactTail} = {formatPValue(exact.pValues[config.alternative === "two-sided" ? "twoSided" : config.alternative])}
       </Formula>
     </div>
@@ -244,7 +244,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
           <Formula label="Check">
             U₁ + U₂ = {num(u.U1)} + {num(u.U2)} = {num(u.U1 + u.U2)} = n₁ × n₂ = {u.n1} × {u.n2} ✓
           </Formula>
-          <Formula label="Test statistic (smaller U)">
+          <Formula highlight label="Test statistic (smaller U)">
             U = min(U₁, U₂) = min({num(u.U1)}, {num(u.U2)}) = <strong>{num(u.U)}</strong>
           </Formula>
         </div>
@@ -305,7 +305,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
           <Notice level="warning">{typographicMinus(interpretation.decisionExplanation)}</Notice>
         ) : (
           <>
-            <Formula label="Compare the p-value with α">
+            <Formula highlight label="Compare the p-value with α">
               p = {formatPValue(p)} {result.decision === "reject" ? "≤" : ">"} α = {alpha} →{" "}
               <strong>{interpretation.decisionStatement}</strong>
             </Formula>
@@ -322,7 +322,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
       </Step>
 
       <Step number={7} title="Conclusion">
-        <p className="text-[17px] leading-relaxed text-ink">{typographicMinus(interpretation.conclusion)}</p>
+        <p className="rounded-md border-l-[3px] border-accent bg-accent-soft px-4 py-3 text-[17px] leading-relaxed text-ink ring-1 ring-accent-line">{typographicMinus(interpretation.conclusion)}</p>
         <p>{typographicMinus(interpretation.directionStatement)}</p>
         <p className="text-sm text-muted">
           The Mann–Whitney U test compares rank distributions, not means. The result applies to these samples and does not

@@ -135,7 +135,7 @@ export function PresentationDeck() {
   return (
     <div className="slide-root flex h-dvh flex-col text-ink">
       {/* Top bar */}
-      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line/60 bg-canvas/40 px-4 py-2 backdrop-blur sm:px-6">
+      <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-surface/90 px-4 py-2 backdrop-blur sm:px-6">
         <p className="min-w-0 truncate text-sm text-muted">
           <span className="font-semibold text-ink">Mann–Whitney U Test</span>
           {index > 0 && <span className="hidden sm:inline"> · {slide.title}</span>}
@@ -180,7 +180,7 @@ export function PresentationDeck() {
       </main>
 
       {/* Bottom bar */}
-      <footer className="relative z-10 shrink-0 border-t border-line/60 bg-canvas/60 px-4 py-2.5 backdrop-blur sm:px-6">
+      <footer className="relative z-10 shrink-0 border-t border-line bg-surface/90 px-4 py-2.5 backdrop-blur sm:px-6">
         <div className="flex items-center gap-3">
           <button type="button" onClick={prev} disabled={index === 0} className={iconButton} aria-label="Previous slide">
             <ChevronLeft className="h-4 w-4" aria-hidden />

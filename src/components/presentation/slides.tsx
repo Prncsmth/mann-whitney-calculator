@@ -361,7 +361,7 @@ function ConclusionSlide({ result }: SlideProps) {
   return (
     <div className="st-gap flex flex-col">
       <SlideHeading>Conclusion</SlideHeading>
-      <p className="st-lead max-w-[60em] text-ink">{typographicMinus(interpretation.conclusion)}</p>
+      <p className="st-lead st-pad max-w-[64em] rounded-lg border-l-4 border-accent bg-accent-soft text-ink ring-1 ring-accent-line">{typographicMinus(interpretation.conclusion)}</p>
       <div className="grid gap-[0.8em] sm:grid-cols-3">
         <SlidePanel tone="subtle">
           <SlideLabel>Mean rank</SlideLabel>
