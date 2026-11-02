@@ -133,12 +133,12 @@ describe("CalculatorWorkspace — sample dataset results", () => {
       .map((h) => h.querySelector("[data-step-title]")?.textContent)
       .filter((t) => t?.startsWith("Step"));
     expect(titles).toEqual([
-      "Step 1: State the hypotheses",
-      "Step 2: Level of significance",
-      "Step 3: Given data",
-      "Step 4: Statistical test used",
-      "Step 5: Compute the test statistic",
-      "Step 6: Statistical decision",
+      "Step 1: State the null hypothesis and alternative hypothesis",
+      "Step 2: State the level of significance",
+      "Step 3: Write the data",
+      "Step 4: Test statistic used",
+      "Step 5: Calculate the test statistic and determine the critical table value",
+      "Step 6: Make a decision",
       "Step 7: Conclusion",
     ]);
     expect(screen.queryByRole("tablist")).toBeNull();
@@ -242,7 +242,7 @@ describe("CalculatorWorkspace — sample dataset results", () => {
     expect(document.getElementById("step-5-body")!.hidden).toBe(true);
 
     // One-line answers are visible without opening anything.
-    expect(screen.getByText("U = 5 · z = −3.3753 · p = 0.00074")).toBeTruthy();
+    expect(screen.getByText("U = 5 · z = −3.3753 · p = 0.00074 · critical table value = 23")).toBeTruthy();
     expect(screen.getByText("Reject H₀ (p = 0.00074 ≤ α = 0.05)")).toBeTruthy();
     expect(screen.getByText("Significant difference · Gamified Learning scored higher")).toBeTruthy();
 

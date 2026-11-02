@@ -19,7 +19,7 @@ interface ProcedureStep {
  */
 const PROCEDURE: ProcedureStep[] = [
   {
-    title: "State the hypotheses",
+    title: "State the null hypothesis and alternative hypothesis",
     text: "Write the null hypothesis (H₀) and the alternative hypothesis (H₁). The null hypothesis says there is no difference between the two groups. The alternative hypothesis says there is a difference.",
     substeps: [
       "Two-tailed (two-sided) test: H₁ says the groups differ, without saying which group is higher.",
@@ -31,12 +31,12 @@ const PROCEDURE: ProcedureStep[] = [
     ],
   },
   {
-    title: "Set the level of significance",
+    title: "State the level of significance",
     text: "Choose alpha (α), the level of significance. Alpha is the risk we accept of rejecting the null hypothesis when it is actually true (a Type I error). The usual choice is 0.05, which means a 5% risk.",
     formulas: ["α = 0.05"],
   },
   {
-    title: "List the given data",
+    title: "Write the data",
     text: "Write the scores of each group and count how many scores each group has.",
     substeps: [
       "n₁ is the number of scores in Group A.",
@@ -46,11 +46,11 @@ const PROCEDURE: ProcedureStep[] = [
     formulas: ["N = n₁ + n₂"],
   },
   {
-    title: "Name the statistical test",
+    title: "Test statistic used",
     text: "Use the Mann–Whitney U test. It is a nonparametric test for two independent samples: the two groups contain different people, and the data do not need to follow a normal distribution. The test compares the ranks of the scores, not their means.",
   },
   {
-    title: "Compute the test statistic",
+    title: "Calculate the test statistic and determine the critical table value",
     text: "Follow these steps in order.",
     substeps: [
       "Combine the scores of both groups into one list.",
@@ -74,7 +74,7 @@ const PROCEDURE: ProcedureStep[] = [
     key: true,
   },
   {
-    title: "Make the statistical decision",
+    title: "Make a decision",
     text: "Compare the p-value with alpha.",
     substeps: [
       "If the p-value is less than or equal to alpha, reject the null hypothesis.",
@@ -85,7 +85,7 @@ const PROCEDURE: ProcedureStep[] = [
     key: true,
   },
   {
-    title: "Write the conclusion",
+    title: "Conclusion",
     text: "State the result in complete sentences, using the names of the groups, the values of U and p, and which group tended to have higher scores. Describe only what the sample shows. Do not claim that one group is better in general, or that one thing caused the difference.",
   },
 ];
@@ -120,7 +120,8 @@ export default function AboutPage() {
                   {i + 1}
                 </span>
                 <div className="min-w-0 flex-1 space-y-2 text-[15px] leading-relaxed text-ink-soft">
-                  <h3 className="text-lg text-ink">{step.title}</h3>
+                  <p aria-hidden className="text-xs font-semibold tracking-wider text-muted uppercase">Step {i + 1}</p>
+                  <h3 className="mt-0.5! font-sans text-lg font-bold text-accent">{step.title}</h3>
                   <p>{step.text}</p>
                   {step.substeps && (
                     <ol className="list-[lower-alpha] space-y-1 pl-6 marker:text-muted">

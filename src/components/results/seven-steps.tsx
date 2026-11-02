@@ -30,7 +30,7 @@ export const SHOW_SOLUTION_EVENT = "mann-whitney:show-solution";
 
 const STEP_COUNT = 7;
 /** Short names for the step navigation bar. */
-const NAV_LABELS = ["Hypotheses", "Significance", "Given data", "Test used", "Computation", "Decision", "Conclusion"];
+const NAV_LABELS = ["Hypotheses", "Level of significance", "Data", "Test statistic used", "Calculate", "Decision", "Conclusion"];
 
 const StepsContext = createContext<{ open: boolean[]; toggle: (n: number) => void }>({
   open: Array(STEP_COUNT).fill(true),
@@ -63,7 +63,10 @@ function Step({ number, title, summary, children }: {
             {number}
           </span>
           <span className="min-w-0 flex-1">
-            <span data-step-title>
+            <span aria-hidden className="block font-sans text-xs font-semibold tracking-wider text-muted uppercase">
+              Step {number}
+            </span>
+            <span data-step-title className="block font-sans font-bold text-accent">
               <span className="sr-only">Step {number}: </span>
               {title}
             </span>
@@ -141,11 +144,14 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
     `α = ${alpha}`,
     `n₁ = ${u.n1} · n₂ = ${u.n2} · N = ${u.N}`,
     "Mann–Whitney U test",
-    p === null
+    (p === null
       ? `U = ${num(u.U)} · p-value not computable`
       : result.methodUsed === "asymptotic" && asymptotic.computable
         ? `U = ${num(u.U)} · z = ${fx(asymptotic.z)} · p = ${formatPValue(p)}`
-        : `U = ${num(u.U)} · p = ${formatPValue(p)} (exact)`,
+        : `U = ${num(u.U)} · p = ${formatPValue(p)} (exact)`) +
+      (result.conventionalCriticalValue.available
+        ? ` · critical table value = ${num(result.conventionalCriticalValue.value)}`
+        : " · no critical table value"),
     p === null
       ? "No decision"
       : `${interpretation.decisionStatement} (p = ${formatPValue(p)} ${result.decision === "reject" ? "≤" : ">"} α = ${alpha})`,
@@ -307,7 +313,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </ol>
       </nav>
 
-      <Step number={1} title="State the hypotheses" summary={summaries[0]}>
+      <Step number={1} title="State the null hypothesis and alternative hypothesis" summary={summaries[0]}>
         <Formula label="Null hypothesis (H₀)">
           <span className="font-sans">{interpretation.nullHypothesis}</span>
         </Formula>
@@ -317,7 +323,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         <p className="text-sm text-muted">Test direction: {alternativeLabel(config.alternative)}.</p>
       </Step>
 
-      <Step number={2} title="Level of significance" summary={summaries[1]}>
+      <Step number={2} title="State the level of significance" summary={summaries[1]}>
         <Formula>α = {alpha}</Formula>
         <p>
           We accept a {alphaPercent}% risk of rejecting H₀ when it is actually true (a Type I error). The p-value will be
@@ -325,7 +331,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
 
-      <Step number={3} title="Given data" summary={summaries[2]}>
+      <Step number={3} title="Write the data" summary={summaries[2]}>
         <div className="grid gap-4 md:grid-cols-2">
           {(["A", "B"] as const).map((g) => {
             const group = g === "A" ? result.input.groupA : result.input.groupB;
@@ -349,7 +355,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         <p className="font-mono text-sm text-ink-soft">N = n₁ + n₂ = {u.n1} + {u.n2} = {u.N}</p>
       </Step>
 
-      <Step number={4} title="Statistical test used" summary={summaries[3]}>
+      <Step number={4} title="Test statistic used" summary={summaries[3]}>
         <p>
           <strong className="text-ink">Mann–Whitney U test</strong> (also called the Wilcoxon rank-sum test). It is a
           nonparametric test for two independent samples: it does not assume the data are normally distributed, and it
@@ -366,7 +372,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </p>
       </Step>
 
-      <Step number={5} title="Compute the test statistic" summary={summaries[4]}>
+      <Step number={5} title="Calculate the test statistic and determine the critical table value" summary={summaries[4]}>
         <SubHeading>a. Combine, sort, and rank all scores</SubHeading>
         <p>
           All {u.N} scores are combined and sorted from lowest to highest. Ranks start at 1. Tied scores receive the
@@ -472,7 +478,7 @@ export function SevenSteps({ result }: { result: MannWhitneyResult }) {
         </div>
       </Step>
 
-      <Step number={6} title="Statistical decision" summary={summaries[5]}>
+      <Step number={6} title="Make a decision" summary={summaries[5]}>
         {p === null ? (
           <Notice level="warning">{typographicMinus(interpretation.decisionExplanation)}</Notice>
         ) : (
