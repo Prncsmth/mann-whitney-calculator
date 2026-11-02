@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Calculator, LayoutDashboard, Presentation, type LucideIcon } from "lucide-react";
+import { BookOpen, Calculator, LayoutDashboard, Presentation, Table2, type LucideIcon } from "lucide-react";
 import { NAV_ITEMS, type NavIcon } from "@/constants/app";
 
 const ICONS: Record<NavIcon, LucideIcon> = {
@@ -10,6 +10,7 @@ const ICONS: Record<NavIcon, LucideIcon> = {
   calculator: Calculator,
   presentation: Presentation,
   book: BookOpen,
+  table: Table2,
 };
 
 export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
